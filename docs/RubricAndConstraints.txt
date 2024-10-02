@@ -1,0 +1,19 @@
+***Predicted Grading Focuses***
+Scope
+Integration of Course Naterial
+Learned New Material
+
+***Focuses in Project***
+Scope
+	Base Scope - Generate 1000 x 1000 map
+	Map Generator Modularity
+
+Integration of Course Material
+
+Learned New Material
+	Rust
+
+***Constraints***
+Have base scope of project finished by halfway through semester (7 weeks)
+	Soft deadline for minimum functional deliverable - 10/11
+	Hard deadline - 10/18
