@@ -1,7 +1,7 @@
 use crate::modules::tile::Tile;
 
-const WIDTH: usize = 414;
-const LENGTH: usize = 414;
+pub const WIDTH: usize = 414;
+pub const LENGTH: usize = 414;
 
 pub struct Map {
     pub height_map: [[Tile; WIDTH]; LENGTH]
@@ -16,7 +16,7 @@ impl Default for Map {
 }
 
 fn build_empty_map() -> [[Tile; WIDTH]; LENGTH] {
-    let mut empty_map = [[Tile { ..Default::default() }; WIDTH]; LENGTH];
+    let empty_map = [[Tile { ..Default::default() }; WIDTH]; LENGTH];
     empty_map
 }
 

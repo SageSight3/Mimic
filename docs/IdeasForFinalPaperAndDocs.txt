@@ -1,6 +1,7 @@
 things learned with rust
-OWNERSHIP IS BEAUTIFUL
-BORROWING IS W
+ownership and borrowing
+traits
+module structure
 
 crates used so far:
 eframe

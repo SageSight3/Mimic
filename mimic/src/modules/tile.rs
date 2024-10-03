@@ -16,3 +16,8 @@ impl Clone for Tile {
         *self
     }
 }
+
+impl Tile {
+    pub fn increment_height(mut self) {
+    }
+}
