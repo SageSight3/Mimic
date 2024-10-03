@@ -1,3 +1,7 @@
 things learned with rust
 OWNERSHIP IS BEAUTIFUL
 BORROWING IS W
+
+crates used so far:
+eframe
+env_logger
