@@ -1,22 +1,16 @@
-use crate::modules::tile::Tile;
+use crate::modules::tile;
+use crate::modules::map_attrs;
 
-pub const WIDTH: usize = 414;
-pub const LENGTH: usize = 414;
-
+#[derive(Debug)]
 pub struct Map {
-    pub height_map: [[Tile; WIDTH]; LENGTH]
+    pub map: Vec<Vec<tile::Tile>>
 }
 
-impl Default for Map {
-    fn default() -> Self {
-        Self {
-            height_map: build_empty_map()
+impl Map {
+    pub fn new(map_attributes: &map_attrs::MapAttrs) -> Map {
+        let tiles = vec![vec![tile::Tile::new(&map_attributes.base_tile_height); map_attributes.width]; map_attributes.length];
+        Map {
+            map: tiles
         }
     }
 }
-
-fn build_empty_map() -> [[Tile; WIDTH]; LENGTH] {
-    let empty_map = [[Tile { ..Default::default() }; WIDTH]; LENGTH];
-    empty_map
-}
-

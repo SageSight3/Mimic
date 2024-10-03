@@ -32,6 +32,7 @@ pub fn start_app() -> eframe::Result {
     )
 }
 
+#[derive(Debug)]
 struct MimicGUI {
     map_generation_msg: String
 }
