@@ -15,7 +15,6 @@ impl Default for Map {
     }
 }
 
-
 fn build_empty_map() -> [[Tile; WIDTH]; LENGTH] {
     let mut empty_map = [[Tile { ..Default::default() }; WIDTH]; LENGTH];
     empty_map
