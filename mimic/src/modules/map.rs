@@ -18,7 +18,7 @@ impl Map {
     pub fn generate_map(&mut self) {
         for row in &mut self.tiles {
             for tile in row {
-                //temporary, just to create omething with the map
+                //temporary, just to create something with the map
                 let a_height: i32 = rand::thread_rng().gen_range(1..256);
                 tile.set_height(a_height);
             }

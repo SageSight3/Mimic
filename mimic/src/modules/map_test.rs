@@ -75,6 +75,7 @@ fn test_generate_map() {
     a_map.generate_map();
     for row in a_map.tiles{
         for col in row {
+            //based on temporary implementation of map generation
             assert!(*col.get_height() < 256);
         }
     }
