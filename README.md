@@ -7,3 +7,4 @@ Mimic is a pseudo-realistic procedural map generator using algorithms attempting
 # 
 [Tasks](./docs/Tasks.md)\
 [Features](./docs/Features.md)
+[Issues List](./docs/IssuesList.md)

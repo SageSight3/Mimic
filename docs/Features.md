@@ -6,10 +6,13 @@ Has:
 
 ### Map Specification
 
+### Map Generator
+* temporary implementation: randomly sets the height for each of the map's tiles to a value in a range from 1 to 256 
+
 ### Crater Generator
 
 ### Water Map Generator
 
-### Map Data Interpreter
+### Map Data/Image Interpreter
 
 ### Image Generator
