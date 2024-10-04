@@ -9,7 +9,6 @@ dependencies = [
  "eframe",
  "env_logger",
  "rand",
- "vec2d",
 ]
 
 [[package]]
@@ -2946,12 +2945,6 @@ name = "utf8parse"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
-
-[[package]]
-name = "vec2d"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "05a6c08b43438f5ef373e5138c3f6ed5a823f0c961e77de8a664342c7a8e9e31"
 
 [[package]]
 name = "version_check"
