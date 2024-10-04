@@ -2,7 +2,7 @@
 
 ### Build MVC for GUI
 
-### Generate an empty map
+### Temporary map generation - DONE
 create base map data structure, to outline base map data interpreter and image gernerator
 
 ### Design Map Specification
@@ -11,6 +11,8 @@ create base map data structure, to outline base map data interpreter and image g
 
 ### Build water map generator
 
-### Image Interpreter
+### Temporary Image Interpreter
+implement temporary image interpreter so a image generator can be implemented
 
 ### Image Generator
+take interpreted map data and output an image

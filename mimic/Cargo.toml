@@ -6,4 +6,5 @@ edition = "2021"
 [dependencies]
 eframe = "0.29.1"
 env_logger = "0.11.5"
+rand = "0.8.5"
 vec2d = "0.4.1"

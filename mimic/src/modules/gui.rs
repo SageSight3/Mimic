@@ -50,8 +50,9 @@ impl eframe::App for MimicGUI {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Welcome to Mimic!");
             if ui.button("Generate Map").clicked() {
+                self.map_generation_msg = "Generating...".to_string();
                 //generateMap();
-                self.map_generation_msg = "Map generated!".to_string()
+                self.map_generation_msg = "Map generated!".to_string();
             }
             ui.label(format!("{}", self.map_generation_msg));
         });
