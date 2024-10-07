@@ -1,6 +1,8 @@
 #[cfg(test)]
 use super::*;
 use crate::modules::map_attrs;
+use crate::modules::map;
+use crate::modules::tile;
 
 #[test]
 fn test_map_attrs() {

@@ -40,7 +40,10 @@ struct MimicGUI {
 impl Default for MimicGUI { //default values for MimicGUI
     fn default() -> Self {
         Self {
-            map_generation_msg: "".to_string()
+            map_generation_msg: "".to_string(),
+            //MapGenerator/MapGenerationObserver
+            //pass
+            //eon
         }
     }
 }

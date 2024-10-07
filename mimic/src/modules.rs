@@ -1,7 +1,6 @@
 pub mod gui;
-mod tile;
-mod tile_test;
-mod map;
-mod map_attrs;
-mod map_test;
-mod gui_interaction_layer;
+pub mod tile;
+pub mod map;
+pub mod map_attrs;
+pub mod gui_interaction_layer;
+pub mod map_generator;

@@ -1,5 +1,6 @@
 #[cfg(test)]
 use super::*;
+use crate::modules::tile;
 
 #[test]
 fn test_constructor() {
