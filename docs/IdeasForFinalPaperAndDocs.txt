@@ -2,6 +2,10 @@ things learned with rust
 ownership and borrowing
 traits
 module structure
+undafe code
+unstable code
+rust's drawbacks (still in development)
+GUI issue (no control outside of gui mod)
 
 crates used so far:
 eframe

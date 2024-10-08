@@ -26,9 +26,20 @@ fn make_test_map_attrs() -> map_attrs::MapAttrs {
 }
 
 #[test]
+fn test_default() {
+    let default_map_attrs: map_attrs::MapAttrs = Default::default();
+    let a_map: map::Map = Default::default();
+
+    assert_eq!(a_map.tiles.len(), default_map_attrs.length);
+    for row in a_map.tiles {
+        assert_eq!(row.len(), default_map_attrs.width);
+    }
+}
+
+#[test]
 fn test_constructor() {
-    let a_map_attrs = make_test_map_attrs();
-    let a_map = map::Map::new(&a_map_attrs);
+    let a_map_attrs: map_attrs::MapAttrs = Default::default();
+    let a_map: map::Map = Default::default();
 
     let mut tile_count = 0;
     assert_eq!(a_map.tiles.len(), a_map_attrs.length);
@@ -47,15 +58,15 @@ fn test_constructor() {
 
 #[test]
 fn test_get_tiles() {
-    let a_map_attrs = make_test_map_attrs();
-    let a_map = map::Map::new(&a_map_attrs);
+    let a_map_attrs: map_attrs::MapAttrs = Default::default();
+    let a_map: map::Map = Default::default();
     assert_eq!(a_map.tiles, *a_map.get_tiles());
 }
 
 #[test]
 fn test_set_tiles() {
-    let a_map_attrs = make_test_map_attrs();
-    let mut a_map = map::Map::new(&a_map_attrs);
+    let a_map_attrs: map_attrs::MapAttrs = Default::default();
+    let mut a_map: map::Map = Default::default();
 
     let new_map = map::Map::new(
         &map_attrs::MapAttrs {
@@ -71,8 +82,8 @@ fn test_set_tiles() {
 
 #[test]
 fn test_generate_map() {
-    let a_map_attrs = make_test_map_attrs();
-    let mut a_map = map::Map::new(&a_map_attrs);
+    let a_map_attrs: map_attrs::MapAttrs = Default::default();
+    let mut a_map: map::Map = Default::default();
 
     a_map.generate_map();
     for row in a_map.tiles{
@@ -85,8 +96,8 @@ fn test_generate_map() {
 
 #[test]
 fn set_tile() {
-    let a_map_attrs = make_test_map_attrs();
-    let mut a_map = map::Map::new(&a_map_attrs);
+    let a_map_attrs: map_attrs::MapAttrs = Default::default();
+    let mut a_map: map::Map = Default::default();
 
     let row: usize = 564;
     let col: usize = 764;
@@ -101,8 +112,8 @@ fn set_tile() {
 
 #[test]
 fn get_tile() {
-    let a_map_attrs = make_test_map_attrs();
-    let mut a_map = map::Map::new(&a_map_attrs);
+    let a_map_attrs: map_attrs::MapAttrs = Default::default();
+    let mut a_map: map::Map = Default::default();
     let new_tile = tile::Tile::new(&796);
     let row: usize = 865;
     let col: usize = 432;

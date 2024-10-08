@@ -7,6 +7,14 @@ pub struct Map {
     pub tiles: Vec<Vec<tile::Tile>>
 }
 
+impl Default for Map {
+    fn default() -> Self {
+        Map::new(&map_attrs::MapAttrs {
+            ..Default::default()
+        })
+    }
+}
+
 impl Map {
     pub fn new(map_attributes: &map_attrs::MapAttrs) -> Map {
         let map_tiles = vec![vec![tile::Tile::new(&map_attributes.base_tile_height); map_attributes.width]; map_attributes.length];
