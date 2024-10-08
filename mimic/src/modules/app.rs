@@ -65,40 +65,32 @@ pub fn start_app() -> eframe::Result {
         //https://github.com/emilk/egui/blob/master/examples/hello_world/src/main.rs
         Box::new(|creation_context| {//|<name>| is closure syntax
 
-            Ok(Box::<MimicGUI>::default())
+            Ok(Box::<Mimic>::default())
         })
     )
 }
 
 #[derive(Debug, Clone)]
-struct MimicGUI {
-    display_status: String
+struct Mimic { //struct that holds full application
+    display_status: String,
+    map_processor: MapProcessor
 }
 
-impl Default for MimicGUI { //default values for MimicGUI
+impl Default for Mimic { //default values for MimicGUI
     fn default() -> Self {
         Self {
             display_status: "".to_string(),
-            //MapGenerator/MapGenerationObserver
-            //pass
-            //eon
+            map_processor: Default::default()
         }
     }
 }
 
-impl eframe::App for MimicGUI {
+impl eframe::App for Mimic {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {  //calls whenever UI needs to be repainted, is required
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Welcome to Mimic!");
             if ui.button("Generate Map").clicked() {
-                /*
-                unsafe {
-                    MapProcessor::mark_gui_dirty("howdy".to_string());
-                }
-                */
-                self.set_display_status("Generating...".to_string());
-                //generateMap();
-                self.set_display_status("MapGenerated".to_string());
+                self.map_processor.process_map();
             }
             unsafe {
                 let gui_observer_ref = GUI_OBSERVER.get().expect("GUI_OBSERVER get failed in app update()");
@@ -115,7 +107,7 @@ impl eframe::App for MimicGUI {
 
 }
 
-impl MimicGUI {
+impl Mimic {
     pub fn set_display_status(&mut self, new_status:String) {
         self.display_status = new_status;
     }

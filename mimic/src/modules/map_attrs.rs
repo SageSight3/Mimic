@@ -1,7 +1,8 @@
+#[derive(Debug, Clone)]
 pub struct MapAttrs {
-    pub length: usize,
-    pub width: usize,
-    pub base_tile_height: i32
+    length: usize,
+    width: usize,
+    base_tile_height: i32
 }
 
 impl Default for MapAttrs {
@@ -11,6 +12,28 @@ impl Default for MapAttrs {
             width: default_width(),
             base_tile_height: default_tile_height()
         }
+    }
+}
+
+impl MapAttrs {
+    pub fn new (len:usize, wid:usize, base_height:i32) -> Self{
+        Self {
+            length: len,
+            width: wid,
+            base_tile_height: base_height
+        }
+    }
+
+    pub fn get_length(&self) -> &usize{
+        &self.length
+    }
+
+    pub fn get_width(&self) -> &usize{
+        &self.width
+    }
+
+    pub fn get_base_tile_height(&self) -> &i32 {
+        &self.base_tile_height
     }
 }
 

@@ -8,22 +8,11 @@ use crate::modules::tile::Tile;
 #[test]
 fn test_map_attrs() {
     let a_tile_height = 6;
-    let a_map_attrs = MapAttrs {
-        base_tile_height: a_tile_height,
-        ..Default::default()
-    };
+    let a_map_attrs = MapAttrs::new(map_attrs::default_length(), map_attrs::default_width(), a_tile_height);
 
-    assert_eq!(a_map_attrs.base_tile_height, a_tile_height);
-    assert_eq!(a_map_attrs.length, map_attrs::default_length());
-    assert_eq!(a_map_attrs.width, map_attrs::default_width());
-}
-
-fn make_test_map_attrs() -> MapAttrs {
-    let a_map_attrs = MapAttrs {
-        ..Default::default()
-    };
-
-    a_map_attrs
+    assert_eq!(*a_map_attrs.get_base_tile_height(), a_tile_height);
+    assert_eq!(*a_map_attrs.get_length(), map_attrs::default_length());
+    assert_eq!(*a_map_attrs.get_width(), map_attrs::default_width());
 }
 
 #[test]
@@ -31,37 +20,30 @@ fn test_default() {
     let default_map_attrs: MapAttrs = Default::default();
     let a_map: Map = Default::default();
 
-    assert_eq!(a_map.tiles.len(), default_map_attrs.length);
-    for row in a_map.tiles {
-        assert_eq!(row.len(), default_map_attrs.width);
+    assert_eq!(a_map.get_tiles().len(), *default_map_attrs.get_length());
+    for row in a_map.get_tiles() {
+        assert_eq!(row.len(), *default_map_attrs.get_width());
     }
 }
 
 #[test]
 fn test_constructor() {
-    let a_map_attrs: MapAttrs = Default::default();
-    let a_map: Map = Default::default();
+    let mut a_map_attrs: MapAttrs = Default::default();
+    let a_map = Map::new(&mut a_map_attrs);
 
     let mut tile_count = 0;
-    assert_eq!(a_map.tiles.len(), a_map_attrs.length);
-    for row in a_map.tiles{
-        assert_eq!(row.len(), a_map_attrs.width);
+    assert_eq!(a_map.get_tiles().len(), *a_map_attrs.get_length());
+    for row in a_map.get_tiles(){
+        assert_eq!(row.len(), *a_map_attrs.get_width());
         for col in row {
             tile_count += 1;
-            assert_eq!(col.height, a_map_attrs.base_tile_height);
+            assert_eq!(col.height, *a_map_attrs.get_base_tile_height());
         }
     }
 
-    let map_length: i32 = a_map_attrs.length.clone() as i32;
-    let map_width: i32 = a_map_attrs.width.clone() as i32;
+    let map_length: i32 = a_map_attrs.get_length().clone() as i32;
+    let map_width: i32 = a_map_attrs.get_width().clone() as i32;
     assert_eq!(tile_count, map_length * map_width);
-}
-
-#[test]
-fn test_get_tiles() {
-    let a_map_attrs: MapAttrs = Default::default();
-    let a_map: Map = Default::default();
-    assert_eq!(a_map.tiles, *a_map.get_tiles());
 }
 
 #[test]
@@ -69,14 +51,9 @@ fn test_set_tiles() {
     let a_map_attrs: MapAttrs = Default::default();
     let mut a_map: Map = Default::default();
 
-    let new_map = Map::new(
-        &MapAttrs {
-            base_tile_height: 46,
-            length: 100,
-            width: 99
-        });
+    let new_map = Map::new(&mut MapAttrs::new(100, 99, 46));
 
-    a_map.set_tiles(new_map.tiles.clone());
+    a_map.set_tiles(new_map.get_tiles().clone());
 
     assert_eq!(a_map.get_tiles(), new_map.get_tiles());
 }
@@ -89,12 +66,12 @@ fn test_set_tile() {
     let row: usize = 564;
     let col: usize = 764;
     
-    assert_eq!(a_map.tiles[row][col].height, a_map_attrs.base_tile_height);
+    assert_eq!(*a_map.get_tile(row, col).get_height(), *a_map_attrs.get_base_tile_height());
 
     let new_tile = Tile::new(&46);
     a_map.set_tile(new_tile.clone(), row, col);
 
-    assert_eq!(a_map.tiles[row][col].height, *new_tile.get_height());
+    assert_eq!(*a_map.get_tile(row, col).get_height(), *new_tile.get_height());
 }
 
 #[test]

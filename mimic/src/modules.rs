@@ -1,4 +1,4 @@
-pub mod gui;
+pub mod app;
 pub mod tile;
 pub mod map;
 pub mod map_attrs;

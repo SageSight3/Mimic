@@ -1,11 +1,12 @@
-use crate::modules::gui::Observer;
-use crate::modules::gui::GUI_OBSERVER;
+use crate::modules::app::Observer;
+use crate::modules::app::GUI_OBSERVER;
 use crate::modules::map::Map;
 use crate::modules::map_generator::MapGenerator;
 use std::sync::OnceLock;
 use std::io;
 
 
+#[derive(Debug, Clone)]
 pub struct MapProcessor {
     map: Map,
     status: String
@@ -28,7 +29,26 @@ impl Default for MapProcessor {
 
 impl MapProcessor {
 
+    pub fn new(a_map: Map) -> MapProcessor {
+        MapProcessor {
+             map: a_map,
+             ..Default::default()
+        }
+    }
+
+    pub fn process_map(&mut self) {
+        //parse_specification(a_map_spedification);
+        self.generate_map();
+        unsafe {
+            Self::mark_gui_dirty("Map generated!".to_string());
+        }   
+    }
+
     pub fn generate_map(&mut self) {
+        unsafe {
+            Self::mark_gui_dirty("Generating".to_string());
+            //println!("i'm here");
+        }
         MapGenerator::generate_map(&mut self.map);
     }
 
@@ -53,6 +73,10 @@ impl MapProcessor {
 
     pub fn get_mut_map(&mut self) -> &mut Map {
         &mut self.map
+    }
+
+    pub fn set_map(&mut self, a_map: Map) {
+        self.map = a_map;
     }
 }
 
