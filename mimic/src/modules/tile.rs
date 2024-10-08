@@ -31,4 +31,9 @@ impl Tile {
     pub fn get_height(&self) -> &i32 {
         &self.height
     }
+    
+    //look into \/
+    //will not be making a getter for a mutable reference to height, as there's not function to mutate height that'd be called by it
+    //getters for mutable references should be implemented only if their return type is a data type with non-obvious ways of mutating
+    //ex. structs
 }

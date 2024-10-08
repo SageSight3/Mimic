@@ -1,12 +1,20 @@
 things learned with rust
-ownership and borrowing
+ownership and borrowing, 
 traits
 module structure
 undafe code
 unstable code
-rust's drawbacks (still in development)
+rust's drawbacks
+    still in development - unstable features
+    sometimes requires overly-constricting organization (mostly in project structure), which can lead to convoluted work arounds
+        project structure
+        limitations of static variables
 GUI issue (no control outside of gui mod)
+explicit mutability, defining getters for both mutable and immutable versions of the data
+optimization and execution time
 
-crates used so far:
+crates/libraries used so far:
 eframe
 env_logger
+rand::Rng
+OnceLock

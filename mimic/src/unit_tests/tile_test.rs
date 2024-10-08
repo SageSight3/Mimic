@@ -1,11 +1,11 @@
 #[cfg(test)]
 use super::*;
-use crate::modules::tile;
+use crate::modules::tile::Tile;
 
 #[test]
 fn test_constructor() {
     let test_height = 33;
-    let a_tile = tile::Tile::new(&test_height);
+    let a_tile = Tile::new(&test_height);
     //println!("{}", a_tile.height); //debug
     assert_eq!(a_tile.height, test_height);
 }
@@ -13,7 +13,7 @@ fn test_constructor() {
 #[test]
 fn test_increment() {
     let test_height = 4;
-    let mut a_tile = tile::Tile::new(&test_height);
+    let mut a_tile = Tile::new(&test_height);
     a_tile.increment_height();
     assert_eq!(*a_tile.get_height(), test_height + 1);
 }
@@ -21,7 +21,7 @@ fn test_increment() {
 #[test]
 fn test_decrement() {
     let test_height = 3;
-    let mut a_tile = tile::Tile::new(&test_height);
+    let mut a_tile = Tile::new(&test_height);
     a_tile.decrement_height();
     assert_eq!(*a_tile.get_height(), test_height - 1);
 }
@@ -29,7 +29,7 @@ fn test_decrement() {
 #[test]
 fn test_set_height() {
     let test_height = 8;
-    let mut a_tile = tile::Tile::new(&test_height);
+    let mut a_tile = Tile::new(&test_height);
     a_tile.set_height(test_height);
     assert_eq!(*a_tile.get_height(), test_height);
 }
@@ -37,6 +37,6 @@ fn test_set_height() {
 #[test]
 fn test_get_height() {
     let test_height = 9;
-    let a_tile = tile::Tile::new(&test_height);
+    let a_tile = Tile::new(&test_height);
     assert_eq!(*a_tile.get_height(), test_height);
 }

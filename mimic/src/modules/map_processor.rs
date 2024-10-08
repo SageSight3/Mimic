@@ -1,12 +1,13 @@
 use crate::modules::gui::Observer;
 use crate::modules::gui::GUI_OBSERVER;
-use crate::modules::map;
+use crate::modules::map::Map;
+use crate::modules::map_generator::MapGenerator;
 use std::sync::OnceLock;
 use std::io;
 
 
 pub struct MapProcessor {
-    map: map::Map,
+    map: Map,
     status: String
     //map_specification: MapSpecification,
     //generation_tasks: Vec<GenerationTask>,
@@ -27,6 +28,10 @@ impl Default for MapProcessor {
 
 impl MapProcessor {
 
+    pub fn generate_map(&mut self) {
+        MapGenerator::generate_map(&mut self.map);
+    }
+
     //GUI interaction, organziation subject to change
     pub unsafe fn mark_gui_dirty(new_status: String) {
         // Attempt to get a mutable reference to the existing observer
@@ -41,5 +46,13 @@ impl MapProcessor {
         }
     }
 
+    //getters and setters
+    pub fn get_map(&self) -> &Map {
+        &self.map
+    }
+
+    pub fn get_mut_map(&mut self) -> &mut Map {
+        &mut self.map
+    }
 }
 

@@ -37,12 +37,20 @@ impl Map {
         &self.tiles
     }
 
+    pub fn get_mut_tiles(&mut self) -> &mut Vec<Vec<tile::Tile>> {
+        &mut self.tiles
+    }
+
     pub fn set_tiles(&mut self, map_tiles: Vec<Vec<tile::Tile>>) {
         self.tiles = map_tiles;
     }
 
     pub fn get_tile(&self, row: usize, col: usize) -> &tile::Tile {
         &self.tiles[row][col]
+    }
+
+    pub fn get_mut_tile(&mut self, row: usize, col: usize) -> &mut tile::Tile {
+        &mut self.tiles[row][col]
     }
 
     //this will be used when needing to completely change a tile, rather than any time any

@@ -8,7 +8,7 @@ Description
 use eframe::egui; //GUI crate
 use std::sync::OnceLock;
 use std::io;
-use crate::map_processor;
+use crate::map_processor::MapProcessor; //is needed for GUI to signal map processor to begin
 
 //https://doc.rust-lang.org/stable/std/sync/struct.OnceLock.html#method.set
 pub static mut GUI_OBSERVER: OnceLock<Observer> = OnceLock::new();
@@ -91,9 +91,9 @@ impl eframe::App for MimicGUI {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Welcome to Mimic!");
             if ui.button("Generate Map").clicked() {
-                /* being kept for future reference in the immediate
+                /*
                 unsafe {
-                    map_processor::MapProcessor::mark_gui_dirty("howdy".to_string());
+                    MapProcessor::mark_gui_dirty("howdy".to_string());
                 }
                 */
                 self.set_display_status("Generating...".to_string());
@@ -103,7 +103,8 @@ impl eframe::App for MimicGUI {
             unsafe {
                 let gui_observer_ref = GUI_OBSERVER.get().expect("GUI_OBSERVER get failed in app update()");
                 if gui_observer_ref.gui_dirty {
-                    self.display_status = gui_observer_ref.status.clone();
+                    //needs to be cloned, since is a shared reference
+                    self.set_display_status(gui_observer_ref.status.clone());
                     mark_gui_clean();
                 }
             }
