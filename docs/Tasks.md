@@ -14,6 +14,9 @@
 
 ## Incomplete
 * Write Map Processor unit tests for map generation - TEMP VERSION DONE
+* Build MVC for GUI - MINIMUM DONE
+* Write App Unit tests
+* Writeunit tests for mark_gui_dirty and mark_gui_clean
 * Temporary Image Interpreter
     * implement temporary image interpreter so a image generator can be implemented
 * Image Generator
