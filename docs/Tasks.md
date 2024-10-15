@@ -5,7 +5,7 @@
 * Build base GUI - DONE
 * Temporary map generation - DONE
     * create base map data structure, to outline base map data interpreter and image gernerator
-* efactor map generation to be in Map Processor - DONE
+* Refactor map generation to be in Map Processor - DONE
 * Write Map Processor unit tests for map generation - TEMP VERSION DONE
 * Build MVC for GUI - MINIMUM DONE
 
