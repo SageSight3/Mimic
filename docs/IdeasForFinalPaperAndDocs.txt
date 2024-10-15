@@ -13,7 +13,9 @@ GUI issue (no control outside of gui mod)
 explicit mutability, defining getters for both mutable and immutable versions of the data
 optimization and execution time
 role of rng in a procedural map generator
-obstacles from hyperfixtion/workflow
+obstacles
+	hyperfixtion/workflow
+	rust's seeming to be intended structure vs how have been taught vs my own understanding/take
 refactoring to rust?
 
 crates/libraries used so far:
