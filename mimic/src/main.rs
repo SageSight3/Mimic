@@ -12,4 +12,10 @@ use eframe::egui;
 
 fn main() {
     app::start_app().expect("App failed to start");
+
+    /*GUI Multithread resolution idea ->look into mutexes with Rust
+    have static/shared mutable var, processing -> maybe reference old GUI Observer to set up
+    thread GUI
+    if processing: thread map processor
+    */    
 }

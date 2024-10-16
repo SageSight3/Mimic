@@ -53,7 +53,7 @@ impl Default for Mimic { //default values for MimicGUI
 
 impl eframe::App for Mimic {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {  //calls whenever UI needs to be repainted, is required
-        //MULTITHREADING STILL NOT MULTITHREADING
+        //MULTITHREADING STILL NOT MULTITHREADING -> cause suspected, will remove later, for now, keeping to use as template
         //https://www.youtube.com/watch?v=3bFSrhm4nEM
         let display_status = self.map_processor.get_status().clone();
 
