@@ -3,3 +3,5 @@ Map processor should have a setup method
 Map generator should have one also, to not waste time processing known information each pass
 
 Optimization is going to be crucial
+
+remove multithreading from gui? unsure if it can be done with egui
