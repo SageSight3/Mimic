@@ -7,14 +7,17 @@ Description
 
 use eframe::egui; //GUI crate
 use std::io;
-use std::thread;
-use std::sync::mpsc;
-use std::thread::Scope;
-use std::time::Duration;
+use std::sync::OnceLock;
 use crate::map_processor::MapProcessor; //is needed for GUI to signal map processor to begin
+
+//https://doc.rust-lang.org/stable/std/sync/struct.OnceLock.html#method.set
+pub static mut GUI_OBSERVER: OnceLock<Observer> = OnceLock::new();
 
 pub fn start_app() -> eframe::Result {
     env_logger::init(); //will log errors to stderr if RUST_LOG = debug
+    unsafe { //initialize observer, this is considered unsafe since this is applying a mutable value to a static variable
+        GUI_OBSERVER.set(Observer::new());
+    }
 
     //defines behavior of the GUI's window
     let options = eframe::NativeOptions {
@@ -38,57 +41,71 @@ pub fn start_app() -> eframe::Result {
     )
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct Mimic { //struct that holds full application
+    display_status: String,
     map_processor: MapProcessor
 }
 
 impl Default for Mimic { //default values for MimicGUI
     fn default() -> Self {
         Self {
-            map_processor: Default::default(),
+            display_status: "".to_string(),
+            map_processor: Default::default()
         }
     }
 }
 
 impl eframe::App for Mimic {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {  //calls whenever UI needs to be repainted, is required
-        //MULTITHREADING STILL NOT MULTITHREADING -> cause suspected, will remove later, for now, keeping to use as template
-        //https://www.youtube.com/watch?v=3bFSrhm4nEM
-        let display_status = self.map_processor.get_status().clone();
-
-        //is map processing?
-        let (sender, reciever) = mpsc::channel();
-
-        //closure for gui thread
-        let gui = || {
-            egui::CentralPanel::default().show(ctx, |ui| {
-                ui.heading("Welcome to Mimic!");
-                if ui.button("Generate Map").clicked() {
-                    //println!("{}", thread::current().id().as_u64()); //nightly only
-                    //signal to start map processor thread - NOT WORKING
-                    sender.send(true).expect("Button press failed to send signal to start map processor thread");
-                } else {
-                    sender.send(false).expect("Button press failed to send signal to skip starting map processor thread");
-                }
-                //the label itself acts as an observer
-                ui.label(format!("{}", display_status));
-            });
-        };
-
-        //map processor thread
-        let map_processor_thread = || {
-            //signal that map processor thread has started
-            //println!("{}", thread::current().id().as_u64()); //nightly only
-            sender.send(false).expect("Failed to signal the GUI that map processor thread has started");
-            self.map_processor.process_map();
-        };
-
-        thread::scope(|scope: &Scope<'_, '_>| { 
-            scope.spawn(gui);
-            if (reciever.recv().expect("Failed to recieve signal to start map processor thread")) {
-                scope.spawn(map_processor_thread);
+        egui::CentralPanel::default().show(ctx, |ui| {
+            ui.heading("Welcome to Mimic!");
+            if ui.button("Generate Map").clicked() {
+                self.map_processor.process_map();
             }
-        }); 
+            unsafe {
+                let gui_observer_ref = GUI_OBSERVER.get().expect("GUI_OBSERVER get failed in app update()");
+                if gui_observer_ref.gui_dirty {
+                    //needs to be cloned, since is a shared reference
+                    self.set_display_status(gui_observer_ref.status.clone());
+                    mark_gui_clean();
+                }
+            }
+            ui.label(format!("{}", self.display_status));
+        });
+    } 
+}
+
+impl Mimic {
+    pub fn set_display_status(&mut self, new_status:String) {
+        self.display_status = new_status;
     }
+}
+
+#[derive(Debug, Clone)]
+pub struct Observer {
+    pub gui_dirty: bool,
+    pub status: String,
+}
+
+impl Observer {
+    pub fn new() -> Observer {
+        let temp = "".to_string();
+        let observer = Observer {
+            gui_dirty: false,
+            status: "".to_string()
+        };
+        observer
+    }
+}
+
+unsafe fn mark_gui_clean() {
+        // Attempt to get a mutable reference to the existing observer
+        if let Some(observer) = GUI_OBSERVER.get_mut() {
+            observer.gui_dirty = false;
+        } else {
+            let mut dirty_observer = Observer::new();
+            dirty_observer.gui_dirty = true;
+            GUI_OBSERVER.set(dirty_observer).expect("Failed to set GUI_OBSERVER");
+        }
 }

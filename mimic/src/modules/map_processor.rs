@@ -1,3 +1,6 @@
+use crate::modules::app::Observer;
+use crate::modules::app::GUI_OBSERVER;
+use std::sync::OnceLock;
 use crate::modules::map::Map;
 use crate::modules::map_generator::MapGenerator;
 use std::io;
@@ -35,12 +38,30 @@ impl MapProcessor {
     pub fn process_map(&mut self) {
         //parse_specification(a_map_spedification);
         self.generate_map();
-        self.status = "Map generated!".to_string();
+        unsafe {
+            Self::mark_gui_dirty("Map generated!".to_string());
+        }   
     }
 
     pub fn generate_map(&mut self) {
-        self.status = "Generating map...".to_string();
+        unsafe {
+            Self::mark_gui_dirty("Generating map...".to_string());
+        }   
         MapGenerator::generate_map(&mut self.map);
+    }
+    
+    //GUI interaction, organziation subject to change
+    pub unsafe fn mark_gui_dirty(new_status: String) {
+        // Attempt to get a mutable reference to the existing observer
+        if let Some(dirty_observer) = GUI_OBSERVER.get_mut() {
+            dirty_observer.gui_dirty = true;
+            dirty_observer.status = new_status;
+        } else {
+            let mut dirty_observer = Observer::new();
+            dirty_observer.gui_dirty = true;
+            dirty_observer.status = new_status;
+            GUI_OBSERVER.set(dirty_observer).expect("Failed to set GUI_OBSERVER");
+        }
     }
 
     //getters and setters
