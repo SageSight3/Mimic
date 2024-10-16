@@ -22,6 +22,7 @@ impl Map {
         let length = map_attributes.get_length().to_owned();
 
         let map_tiles = vec![vec![Tile::new(&base_height); width]; length];
+        
         Map {
             tiles: map_tiles,
             attrs: map_attributes.to_owned()

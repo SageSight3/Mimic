@@ -11,7 +11,7 @@ rust's drawbacks
         limitations of static variables
 GUI issue (no control outside of gui mod)
     immensely restrictive
-    seems to be designed in such a way that renders MVC impossible, and prohibits direct interaction
+    seems to be designed in such a way that renders tradisional MVC impossible, and prohibits direct interaction
     to and from the GUI
 explicit mutability, defining getters for both mutable and immutable versions of the data
 optimization and execution time
@@ -24,6 +24,8 @@ refactoring of GUI and map_processor to not need to use GUI_OBSERVER
 rust return statements
     statements vs expressions
 Multithreading issues
+difficulties with self teaching myself rust
+using options to optimize memory management
 
 
 crates/libraries used so far:
@@ -40,5 +42,8 @@ Applied Courses
     Data Structures
     Operating Systems
     
-
-
+Things I wish I'd done
+multithreading
+better memory mamnagement
+review project structure
+using options to optimize memory management earlier

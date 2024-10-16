@@ -3,15 +3,16 @@ use crate::modules::app::GUI_OBSERVER;
 use std::sync::OnceLock;
 use crate::modules::map::Map;
 use crate::modules::map_generator::MapGenerator;
+use crate::modules::image_interpreter::ImageData;
 use std::io;
 
 #[derive(Debug, Clone)]
 pub struct MapProcessor {
     map: Map,
-    status: String
+    status: String,
     //map_specification: MapSpecification,
     //generation_tasks: Vec<GenerationTask>,
-    //map_image_data: ImageData, //data to be passed to map/image interpreter, may not be necessary
+    map_image_data: Option<ImageData>, //data to be passed to map/image interpreter, may not be necessary
     //generated_map_image: Image, //look into how would be set up
     //state: //figure out
     //StateDescription: String //may not be used
@@ -21,7 +22,8 @@ impl Default for MapProcessor {
    fn default() -> Self {
         Self {
             map: Default::default(),
-            status: "Map generator ready!".to_string()
+            status: "Map generator ready!".to_string(),
+            map_image_data: None
         }
     }
 }
