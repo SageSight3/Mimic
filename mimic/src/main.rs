@@ -1,3 +1,6 @@
+//will fix warnings later
+#![allow(warnings)]
+
 mod modules;
 mod unit_tests;
 use modules::app;
@@ -5,6 +8,7 @@ use modules::app;
 //ran into first issue without it in gui, look into
 use modules::map_processor;
 use modules::map_processor::MapProcessor;
+use eframe::egui;
 
 fn main() {
     app::start_app().expect("App failed to start");

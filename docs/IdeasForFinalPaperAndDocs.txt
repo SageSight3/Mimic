@@ -10,6 +10,9 @@ rust's drawbacks
         project structure
         limitations of static variables
 GUI issue (no control outside of gui mod)
+    immensely restrictive
+    seems to be designed in such a way that renders MVC impossible, and prohibits direct interaction
+    to and from the GUI
 explicit mutability, defining getters for both mutable and immutable versions of the data
 optimization and execution time
 role of rng in a procedural map generator
@@ -17,9 +20,25 @@ obstacles
 	hyperfixtion/workflow
 	rust's seeming to be intended structure vs how have been taught vs my own understanding/take
 refactoring to rust?
+refactoring of GUI and map_processor to not need to use GUI_OBSERVER
+rust return statements
+    statements vs expressions
+Multithreading issues
+
 
 crates/libraries used so far:
 eframe
 env_logger
 rand::Rng
 OnceLock
+
+Applied Courses
+    Object Oriented Design
+    Principles of Programming Languages
+    Directed Study - Object Oriented Lang Op Semantics
+    Directed Study - Adv Obj/Orient Component Constr
+    Data Structures
+    Operating Systems
+    
+
+
