@@ -2,7 +2,7 @@ use crate::modules::map::Map;
 
 #[derive(Debug, Clone)]
 pub struct ImageData {
-    pixels: Vec<Vec<u8>>,
+    pixels: Vec<Vec<u8>>, //eventually will be a double vector of lists of 3 or 4 u8s (rgb or rgba)
     map: Map
 }
 

@@ -40,6 +40,7 @@ impl MapProcessor {
     pub fn process_map(&mut self) {
         //parse_specification(a_map_spedification);
         self.generate_map();
+        self.extrapolate_image_data();
         unsafe {
             Self::mark_gui_dirty("Map generated!".to_string());
         }   
@@ -50,6 +51,13 @@ impl MapProcessor {
             Self::mark_gui_dirty("Generating map...".to_string());
         }   
         MapGenerator::generate_map(&mut self.map);
+    }
+
+    pub fn extrapolate_image_data(&mut self) {
+        unsafe {
+            Self::mark_gui_dirty("Extrapolating image data...".to_string());
+        }
+        self.map_image_data = ImageData::interpret_map_data(&mut self.map);
     }
     
     //GUI interaction, organziation subject to change
@@ -81,6 +89,10 @@ impl MapProcessor {
 
     pub fn get_status(&self) -> &String {
         &self.status
+    }
+
+    pub fn get_map_image_data(&self) -> &Option<ImageData> {
+        &self.map_image_data
     }
 }
 

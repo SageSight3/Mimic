@@ -5,3 +5,5 @@ Map generator should have one also, to not waste time processing known informati
 Optimization is going to be crucial
 
 remove multithreading from gui? unsure if it can be done with egui
+
+perlin noise generation for map should happen in setup for map generator

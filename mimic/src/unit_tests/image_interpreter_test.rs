@@ -11,7 +11,10 @@ fn test_new() {
     let mut a_map: Map = Default::default();
     let map_image_data = ImageData::new(&mut a_map);
 
+    assert_eq!(map_image_data.get_pixels().len(), *a_map.get_attrs().get_length());
+
     for row in map_image_data.get_pixels() {
+        assert_eq!(row.len(), *a_map.get_attrs().get_width());
         for col in row {
             //based on temporary implementation of map generation
             assert_eq!(*col, 0);
@@ -31,7 +34,6 @@ fn test_interpret_map_data() {
 
         for row in map_image_data.expect("map image data failed to unwrap in test_interpret_map_data").get_pixels() {
             for col in row {
-                //based on temporary implementation of map generation
                 assert!(*col <= 255);
                 if *col > 1 as u8 {
                     found_high_pixel_value = true;
