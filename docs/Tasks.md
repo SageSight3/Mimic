@@ -18,24 +18,25 @@
 ## Incomplete
 
 ### High Priority
-* Write Map Processor unit tests for map generation - TEMP VERSION DONE - **HIGH**
-* Image Generator - **HIGH**
+* Write Map Processor unit tests for map generation - TEMP VERSION DONE
+* Image Generator
     * take interpreted map data and output an image
     * at bare minimum have map_processor.process_map() fork onto a different thread than the main app
     * GUI should be update over the different phases of process_map()
-* Generate map image using placeholder generator - **HIGH**
-* Build crater generator - **HIGH**
-* Build water map generator - **HIGH**
-* Digitize written documentation - **HIGH**
+* Generate map image using placeholder generator
+* Build crater generator
+* Build water map generation
+* Digitize written documentation
 
 ### Medium Priority
-* Once placeholder functionality's implemented, compile and benchmark a release build - **MEDIUM**
-* Commment code - **MEDIUM**
+* Once placeholder functionality's implemented, compile and benchmark a release build
+* Commment code
+* Implement basic eons
 
 ### Low Priority
 
-* Refactor GUI for MVC and multithreading - **LOW**
+* Refactor GUI for MVC and multithreading
     * look into enums
-* Write App Unit tests - **LOW**
-* Write unit tests for mark_gui_dirty and mark_gui_clean - **LOW**
-* Look into multithreading - **LOW**
+* Write App Unit tests
+* Write unit tests for mark_gui_dirty and mark_gui_clean
+* Look into multithreading
