@@ -38,7 +38,7 @@ impl MapProcessor {
     }
 
     pub fn process_map(&mut self) {
-        //parse_specification(a_map_spedification);
+        //parse_specification(a_map_specification);
         self.generate_map();
         self.extrapolate_image_data();
         unsafe {
