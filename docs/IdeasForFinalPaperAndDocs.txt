@@ -26,6 +26,8 @@ rust return statements
 Multithreading issues
 difficulties with self teaching myself rust
 using options to optimize memory management
+being more conservative/attentitive with data types
+traits
 
 
 crates/libraries used so far:
@@ -47,3 +49,5 @@ multithreading
 better memory mamnagement
 review project structure
 using options to optimize memory management earlier
+being more conservative/attentitive with data types sooner
+Utilization of traits

@@ -1,5 +1,6 @@
 use crate::modules::map::Map;
 use rand::Rng;
+use crate::modules::feature_generators::impact_generator::ImpactGenerator;
 
 /*******************************************************
 VERY WIP

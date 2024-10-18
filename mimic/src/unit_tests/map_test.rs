@@ -3,6 +3,7 @@ use super::*;
 use crate::modules::map_attrs;
 use crate::modules::map_attrs::MapAttrs;
 use crate::modules::map::Map;
+use crate::modules::map::Coordinate;
 use crate::modules::tile::Tile;
 
 #[test]
@@ -113,3 +114,26 @@ fn test_get_mut_tile() {
     assert_eq!(*a_map.get_tile(row, col).get_height(), a_height);
 }
 
+#[test]
+fn test_new_coordinate() {
+    let x: usize = 56;
+    let y: usize = 55;
+
+    let a_coordinate: Coordinate = Coordinate::new(x, y);
+
+    assert_eq!(*a_coordinate.get_X(), x);
+    assert_eq!(*a_coordinate.get_Y(), y);
+}
+
+#[test]
+fn test_random_coordinate() {
+    let a_map_attrs: MapAttrs = Default::default();
+    let mut a_map: Map = Default::default();
+    
+    let a_coordinate: Coordinate = a_map.random_coordinate();
+
+    assert!(*a_coordinate.get_X() < *a_map.get_attrs().get_width());
+    assert!(*a_coordinate.get_Y() < *a_map.get_attrs().get_length());
+    assert!(*a_coordinate.get_X() >= 0);
+    assert!(*a_coordinate.get_Y() >= 0);
+}

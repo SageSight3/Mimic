@@ -58,4 +58,34 @@ impl Map {
     pub fn get_attrs(&mut self) -> &MapAttrs {
         &self.attrs
     }
+
+    pub fn random_coordinate(&self) -> Coordinate {
+        let x: usize = rand::thread_rng().gen_range(0..*self.attrs.get_width());
+        let y: usize = rand::thread_rng().gen_range(0..*self.attrs.get_length());
+
+        let a_coordinate: Coordinate = Coordinate::new(x, y);
+        a_coordinate
+    }
+}
+
+pub struct Coordinate {
+    x: usize,
+    y: usize
+}
+
+impl Coordinate {
+    pub fn new(x_coord: usize, y_coord: usize) -> Coordinate {
+        Coordinate {
+            x: x_coord,
+            y: y_coord
+        }
+    }
+
+    pub fn get_X(&self) -> &usize {
+        &self.x
+    }
+
+    pub fn get_Y(&self) -> &usize {
+        &self.y
+    }
 }

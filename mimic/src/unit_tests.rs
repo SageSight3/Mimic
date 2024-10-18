@@ -5,3 +5,5 @@ mod map_processor_test;
 mod map_generator_test;
 mod app_test;
 mod image_interpreter_test;
+mod image_generator_test;
+mod feature_generator_tests;

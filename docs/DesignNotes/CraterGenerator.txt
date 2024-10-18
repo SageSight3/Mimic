@@ -1,0 +1,56 @@
+	A simplified relationship between crater diameter and impact energy is:
+		Kinetic Energy = Diameter^3
+	
+	Energy can the be used to determine mass (units of height) needing to be added
+	For Mimic
+		Split asteroids into three categories for velocity: high, medium, low
+		Subject to change:
+			High = 2
+			Medium (average) = 1 (most impacts should come from objects with medium velocity)
+			Low = .5
+
+		Process
+			Randomly generate crater size
+			Use formula to calculate mass to add to map/height needing to be distributed
+			0.5*(heightToBeAdded)*velocity^2 = diameter^3
+
+		Math for reference
+			Volume of 1 unit of height: 500000cm * 500000cm * 10000cm = 2.50E+15cm^3
+	M = 2g/cm^3 * 25000000m^3 = 50,000,000,000kg
+
+Proof
+Chicxulub Crater radius = 100km = 20 tiles
+		Estimated mass = 1.0E+15kg = 20000units of height
+		Estimated Volume = 4.188790E+17 cm^3 = 16755 units of height
+				Estimated width = 10km = 2 tiles
+
+	erg is a unit of energy - 1 erg = 1E-7 J
+Kinetic Energy = (9.1 * 10^24(200km)^2.59)erg = 8.292950699999998890E+23 J
+Kinetic Energy using 1/2M*v^2 = (1.0E+15(20000^2))/2 = 2.0E+23 J
+(1.0E+15(20000^2))/2
+
+8.292950699999998890E+23 J = 1/2Mkg((20000m/s)^2)
+M = ~ 4.1464753E+15kg
+		In same order of magnitude as estimated mass of impactor
+
+	Medium Velocity = 20000m/s = 4 tiles/s
+
+In crater generator algorithm - parameters will take a depth range
+	craterRadius = craterDepth * (1 /log(craterDepth)) * 5 + rand() % 2 //note rand is c++ rand, other languages wouldn’t need mod
+                                                                        //also exists to add slight variation to craters of similaar depths
+                                                                        //is unnecessary
+
+	Based off observations that crater diameters tend to be in the range of 5-10-15?-20? times larger than their depths, trust the process, i did the research before, though i lost it
+	
+	After radius is found, impactEnergy = (random float between 1 and 10, min value = 1) * 10^17((2*radius in tiles*5km)^2.59)
+	To find mass in units of height: impactEnergy/(2*(velocity^2)*50,000,000,000)
+
+//found through the math, as well as some trial and error
+To find height needing to be redistributed:
+Full formula: ((thread_rng().gen_range(1.0..10.0)) * ((2*radius*5)^2.59)*10) / (2*500*velocityTier)
+10^2.59 = 389.045144994
+91 * 389.045144994 = 3540.31081945
+3540.31081945 * 10 = ~ 35400
+//simpliefied equations are mostly accurate
+Simplified equation: (35400(radius^2.59))/(2000*velocityTier) with hard constant of 9.1
+Simplified equation using rng: (thread_rng().gen_range(1.0..10.0) * 3890 * (radius^2.59))/(2000*velocityTier)
