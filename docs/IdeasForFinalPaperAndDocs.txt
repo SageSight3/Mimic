@@ -28,6 +28,7 @@ difficulties with self teaching myself rust
 using options to optimize memory management
 being more conservative/attentitive with data types
 traits
+Optimization
 
 
 crates/libraries used so far:
