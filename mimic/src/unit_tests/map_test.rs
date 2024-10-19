@@ -137,3 +137,39 @@ fn test_random_coordinate() {
     assert!(*a_coordinate.get_X() >= 0);
     assert!(*a_coordinate.get_Y() >= 0);
 }
+
+#[test]
+fn test_update_tiles() {
+    let height = 200;
+    let mut a_map_attrs: MapAttrs = MapAttrs::new(map_attrs::default_length(), map_attrs::default_width(), height);
+    let mut a_map: Map = Map::new(&mut a_map_attrs);
+
+    //control test
+    for row in a_map.get_tiles(){
+        for col in row {
+            assert_eq!(*col.get_height(), height);
+        }
+    }
+
+    //test with passing update_tiles() a function
+    a_map.update_tiles(inc_tiles_height); //inc_tiles_height declared below
+    for row in a_map.get_tiles(){
+        for col in row {
+            assert_eq!(*col.get_height(), height + 1);
+        }
+    }
+
+    //test with passing update_tiles() a closure
+    let reset_height = |a_tile: &mut Tile| { a_tile.set_height(height); };
+    a_map.update_tiles(reset_height);
+
+    for row in a_map.get_tiles(){
+        for col in row {
+            assert_eq!(*col.get_height(), height);
+        }
+    }
+}
+
+fn inc_tiles_height(a_tile: &mut Tile) {
+    a_tile.increment_height()
+}

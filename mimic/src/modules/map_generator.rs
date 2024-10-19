@@ -2,13 +2,19 @@ use crate::modules::map::Map;
 use rand::Rng;
 use crate::modules::feature_generators::impact_generator::ImpactGenerator;
 
+//remove once removing placeholder generator
+use crate::modules::tile::Tile;
+
 /*******************************************************
-VERY WIP
+A MapGenerator will be responsible for managing Mimic's
+feature generators, with future plans, to increase the
+flexibility of that management via implementation
+of a map's specification
 *******************************************************/
 
 #[derive(Debug)]
 pub struct MapGenerator {
-    duration: i32
+    duration: i32,
     //generatorSpecifications
 }
 
@@ -22,12 +28,10 @@ impl MapGenerator {
     }
 
     pub fn placeholder_generator(a_map: &mut Map) {
-        for row in a_map.get_mut_tiles() {
-            for tile in row {
-                //temporary, just to create something with the map
-                let a_height: i32 = rand::thread_rng().gen_range(1..256);
-                tile.set_height(a_height);
-            }
-        }
+        a_map.update_tiles(|a_tile: &mut Tile| {
+            //temporary, just to create something with the map
+            let a_height: i32 = rand::thread_rng().gen_range(1..256);
+            a_tile.set_height(a_height);
+        });
     }
 }

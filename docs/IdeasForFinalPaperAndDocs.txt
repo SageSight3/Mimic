@@ -29,6 +29,8 @@ using options to optimize memory management
 being more conservative/attentitive with data types
 traits
 Optimization
+update_tiles function
+crater generation algorithm
 
 
 crates/libraries used so far:

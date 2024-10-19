@@ -28,7 +28,25 @@ impl Map {
             attrs: map_attributes.to_owned()
         }
     }
+    
+    pub fn random_coordinate(&self) -> Coordinate {
+        let x: usize = rand::thread_rng().gen_range(0..*self.attrs.get_width());
+        let y: usize = rand::thread_rng().gen_range(0..*self.attrs.get_length());
 
+        let a_coordinate: Coordinate = Coordinate::new(x, y);
+        a_coordinate
+    }
+
+    //look into getting to wrok with closures, as well
+    pub fn update_tiles(&mut self, update_fn: impl Fn(&mut Tile)) { //update function/closure shouldn't take arguments
+        for row in self.get_mut_tiles() {
+            for tile in row {
+                update_fn(tile);
+            }
+        }
+    }
+
+    //getters and setters
     pub fn get_tiles(&self) -> &Vec<Vec<Tile>> {
         &self.tiles
     }
@@ -59,12 +77,12 @@ impl Map {
         &self.attrs
     }
 
-    pub fn random_coordinate(&self) -> Coordinate {
-        let x: usize = rand::thread_rng().gen_range(0..*self.attrs.get_width());
-        let y: usize = rand::thread_rng().gen_range(0..*self.attrs.get_length());
+    pub fn get_length(&self) -> &usize {
+        self.attrs.get_length()
+    }
 
-        let a_coordinate: Coordinate = Coordinate::new(x, y);
-        a_coordinate
+    pub fn get_width(&self) -> &usize {
+        self.attrs.get_width()
     }
 }
 
