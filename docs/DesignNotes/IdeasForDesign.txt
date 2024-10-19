@@ -11,3 +11,10 @@ perlin noise generation for map should happen in setup for map generator
 Tiles: 5km x 5km earlier - each unit of height will = 100meters
 	An Earth-like planet will have a crust with a height range from 0-200, based off the difference in height
 		of Mariana's Trench and the Everest's peak being ~20km (more exact would be closer to ~19km)
+
+Hadean period shouldn't run a dedicated erosion engine
+
+For Erosion:
+	split height into compact and loose materials?
+
+let height go negative, can correct for in image interpreter

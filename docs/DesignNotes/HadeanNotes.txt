@@ -1,0 +1,19 @@
+For impact generation
+	Earth had estimated -> Note these numbers are just for the LHB (Late Heavy Bombardment)
+	unclear if specified diameters are transient crater diamerters or from rim to rim, going off observations in research,
+	I believe they're for the transient crater specifically
+		~100,000 craters > 20km in diameter
+		~3000 craters > 100km in diameter
+		~90 craters > 1000km+ in diameter
+
+These estimates, assuming 50,000 years per pass, and setting eon duration to the duration of the LHB (20M-300M years), would give a frequency of 17-250 impacts per pass at 400-6000 passes
+
+	//subject to change
+	min crater depth = 3
+	max crater depth = 168
+	skew = rand() % -166
+
+For Mimic, this estimates ~C*8,786,200 operations from the impact generator using concept algorithm unchangd
+C range upper bound estimate: ~20
+
+Estimated upper bound for ops over course of LHB impact generation with unchanged concept algorithm ~180,099,000

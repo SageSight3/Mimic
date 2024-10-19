@@ -108,7 +108,7 @@ void Map::genWaterLevel() { //rethink how to set water?
 	}
 }
 
-void Map::craterGen(int rowCoord, int colCoord, int minDepth) {
+void Map::craterGenAlt(int rowCoord, int colCoord, int minDepth) {
 	srand(time(nullptr));
 
 	int center[2] = { rowCoord, colCoord };
@@ -118,6 +118,35 @@ void Map::craterGen(int rowCoord, int colCoord, int minDepth) {
 		radMulti = (1 / (log(craterDepth))) * 5;
 	}
 	int radius = craterDepth * radMulti + (rand() % 2);
+
+	int centerRowOff = rowCoord - radius;
+	int centerColOff = colCoord - radius;
+
+}
+
+/*
+	double radMulti = 1;
+	if (craterDepth > 1) {
+		radMulti = (1 / (log(craterDepth))) * 5;
+	}
+*/
+
+void Map::craterGen(int rowCoord, int colCoord, int minDepth) {
+	srand(time(nullptr));
+
+	int center[2] = { rowCoord, colCoord };
+	double craterDepth = rand() % baseHeight + minDepth + .01;
+	craterDepth = 30;
+
+	/*
+	if (craterDepth > 1) {
+		radMulti = (1 / (log(craterDepth))) * 5;
+	}
+	*/
+
+	//https://en.wikipedia.org/wiki/Impact_crater
+	double radMulti = ((rand() % 2) + 3);
+	int radius = (craterDepth * radMulti) / 5; //+ (rand() % 2);
 
 	//draw edge of crater WIP
 	int centerRowOff = rowCoord - radius;
@@ -149,10 +178,14 @@ void Map::craterGen(int rowCoord, int colCoord, int minDepth) {
 						int tileDepth = baseHeight - round(sqrt(pow(radius - dist, 2) / radMulti));
 						if (tileDepth < map[centerRowOff + row][centerColOff + col]->getHeight()) {
 							if (tileDepth < 0) { tileDepth = 0; }
-							map[centerRowOff + row][centerColOff + col]->setHeight(tileDepth);
+							map[centerRowOff + row][centerColOff + col]->setHeight((int)dist % 10);
 						}
 						if (map[centerRowOff + row][centerColOff + col]->getCraterRing() == 'U') {
-							map[centerRowOff + row][centerColOff + col]->setCraterRing(' ');
+							char markTile = ' ';
+							if (tileDepth % 2 == 0) {
+								markTile = 'O' + tileDepth;
+							}
+							map[centerRowOff + row][centerColOff + col]->setCraterRing(markTile);
 						}
 					}
 				}

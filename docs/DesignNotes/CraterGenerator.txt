@@ -54,3 +54,36 @@ Full formula: ((thread_rng().gen_range(1.0..10.0)) * ((2*radius*5)^2.59)*10) / (
 //simpliefied equations are mostly accurate
 Simplified equation: (35400(radius^2.59))/(2000*velocityTier) with hard constant of 9.1
 Simplified equation using rng: (thread_rng().gen_range(1.0..10.0) * 3890 * (radius^2.59))/(2000*velocityTier)
+
+*******also from original note**********
+To find height needing to be redistributed:
+Full formula: ((thread_rng().gen_range(1.0..10.0)) * (2*radius*5)^2.59)*10) / (2*500*velocityTier)
+Simplified: (35400(radius^2.59)/(2000*velocityTier)
+	Note: The numbers do work to get within the target margin, just try not to think about it to much, it’s weird
+
+Impact Crater formation notes
+	https://en.wikipedia.org/wiki/Impact_crater
+		"As a result, about one third of the volume of the transient crater is formed by the ejection of material, and the remaining two thirds is formed by the displacement of material downwards"
+
+Stretch goal: implement crater aging -> modification and collapse
+
+Beyond crater lip? if performance allows:
+	within 2 to three radii, deposit 
+	
+Crater rim radius (assuming from crater center) is 1.3x to 1.9x the radius of the transient crater
+	crater rim height:diameter ratio will be 
+		.2x diameter for craters where transient crater radius <= 15km,
+		.08-.8 for craters where transient crater diameter > 15km
+
+crater radius formula
+	//C++
+	transient_radius_actual = crater depth * (rand() % 2) + 3))/5.0
+		//from real world observations, transient crater radii relative to depth line up with reality
+	transient_radius = round(transient_radius_actual)
+	rim_radius = round(transient_radius_actual * (1.3 + (rand() % 0.7)))
+
+Note: crater depth does is for full transient crater depth, crater will not be that deep, as max excavation depth is only around a third of full transient crater depth
+	Formula for crater depth should divide it by 3
+
+Have different sub generators for different sizes of crater radius (radius > 9)?
+

@@ -24,6 +24,14 @@ impl Tile {
         self.height -= 1;
     }
 
+    pub fn add_height(&mut self, addend: i32) {
+        self.height += addend;
+    }
+
+    pub fn remove_height(&mut self, subtrahend: i32) {
+        self.height -= subtrahend;
+    }
+
     pub fn set_height(&mut self, a_height: i32) {
         self.height = a_height;
     }
