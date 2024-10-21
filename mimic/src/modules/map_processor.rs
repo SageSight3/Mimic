@@ -5,6 +5,7 @@ use crate::modules::map::Map;
 use crate::modules::map_generator::MapGenerator;
 use crate::modules::image_interpreter::ImageData;
 use crate::modules::image_generator::ImageGenerator;
+use crate::modules::tile::Tile; //may be temporary
 use std::io;
 
 #[derive(Debug, Clone)]
@@ -44,6 +45,13 @@ impl MapProcessor {
 
     pub fn process_map(&mut self) {
         //parse_specification(a_map_specification);
+
+        //set map to a base height, may be moved later/may be defined by map specification
+        let a_height: i32 = 200;
+        self.map.update_tiles(|a_tile: &mut Tile| {
+            a_tile.set_height(a_height);
+        });
+
         self.generate_map();
         self.extrapolate_image_data();
         self.generate_image();
