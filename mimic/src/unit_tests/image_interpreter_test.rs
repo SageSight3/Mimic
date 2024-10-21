@@ -5,6 +5,19 @@ use crate::modules::map::Map;
 use crate::modules::tile::Tile;
 use crate::modules::map_generator::MapGenerator;
 use crate::modules::image_interpreter::ImageData;
+use crate::modules::image_interpreter::Pixel;
+
+#[test]
+fn test_pixel_new() {
+    let r = 6;
+    let g = 54;
+    let b = 63;
+    let a_pixel = Pixel::new(r, g, b);
+
+    assert_eq!(*a_pixel.get_r(), r);
+    assert_eq!(*a_pixel.get_g(), g);
+    assert_eq!(*a_pixel.get_b(), b);
+}
 
 #[test]
 fn test_new() {
@@ -15,9 +28,9 @@ fn test_new() {
 
     for row in map_image_data.get_pixels() {
         assert_eq!(row.len(), *a_map.get_attrs().get_width());
-        for col in row {
+        for pixel in row {
             //based on temporary implementation of map generation
-            assert_eq!(*col, 0);
+            assert_eq!(*pixel.get_r(), 0);
         }
     }
 }
@@ -33,9 +46,9 @@ fn test_interpret_map_data() {
         let mut found_high_pixel_value: bool = false;
 
         for row in map_image_data.expect("map image data failed to unwrap in test_interpret_map_data").get_pixels() {
-            for col in row {
-                assert!(*col <= 255);
-                if *col > 1 as u8 {
+            for pixel in row {
+                assert!(*pixel.get_b() <= 255);
+                if *pixel.get_g() > 1 as u8 {
                     found_high_pixel_value = true;
                 }
             }
@@ -59,10 +72,10 @@ fn test_interpret_height_map() {
     let mut found_high_pixel_value: bool = false;
 
     for row in map_image_data.get_pixels() {
-        for col in row {
+        for pixel in row {
             //based on temporary implementation of map generation
-            assert!(*col <= 255);
-            if *col > 1 as u8 {
+            assert!(*pixel.get_r() <= 255);
+            if *pixel.get_g() > 1 as u8 {
                 found_high_pixel_value = true;
             }
         }

@@ -4,15 +4,18 @@ use std::sync::OnceLock;
 use crate::modules::map::Map;
 use crate::modules::map_generator::MapGenerator;
 use crate::modules::image_interpreter::ImageData;
+use crate::modules::image_generator::ImageGenerator;
 use std::io;
 
 #[derive(Debug, Clone)]
 pub struct MapProcessor {
     map: Map,
+    map_name: String,
     status: String,
     //map_specification: MapSpecification,
     //generation_tasks: Vec<GenerationTask>,
     map_image_data: Option<ImageData>, //data to be passed to map/image interpreter, may not be necessary
+    map_image_path: String
     //generated_map_image: Image, //look into how would be set up
     //state: //figure out
     //StateDescription: String //may not be used
@@ -22,8 +25,10 @@ impl Default for MapProcessor {
    fn default() -> Self {
         Self {
             map: Default::default(),
+            map_name: "placeholder".to_string(),
             status: "Map generator ready!".to_string(),
-            map_image_data: None
+            map_image_data: None,
+            map_image_path: "".to_string()
         }
     }
 }
@@ -41,6 +46,7 @@ impl MapProcessor {
         //parse_specification(a_map_specification);
         self.generate_map();
         self.extrapolate_image_data();
+        self.generate_image();
         unsafe {
             Self::mark_gui_dirty("Map generated!".to_string());
         }   
@@ -60,6 +66,13 @@ impl MapProcessor {
         self.map_image_data = ImageData::interpret_map_data(&mut self.map);
     }
     
+    pub fn generate_image(&mut self) {
+        unsafe {
+            Self::mark_gui_dirty("Generating image...".to_string());
+        }
+        self.map_image_path = ImageGenerator::generate_image(&mut self.map_image_data, &mut self.map_name);
+    }
+
     //GUI interaction, organziation subject to change
     pub unsafe fn mark_gui_dirty(new_status: String) {
         // Attempt to get a mutable reference to the existing observer
@@ -83,6 +96,10 @@ impl MapProcessor {
         &mut self.map
     }
 
+    pub fn get_map_name(&self) -> &String {
+        &self.map_name
+    }
+
     pub fn set_map(&mut self, a_map: Map) {
         self.map = a_map;
     }
@@ -91,8 +108,12 @@ impl MapProcessor {
         &self.status
     }
 
-    pub fn get_map_image_data(&self) -> &Option<ImageData> {
+    pub fn get_image_data(&self) -> &Option<ImageData> {
         &self.map_image_data
+    }
+
+    pub fn get_image_path(&self) -> &String {
+        &self.map_image_path
     }
 }
 

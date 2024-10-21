@@ -44,14 +44,16 @@ pub fn start_app() -> eframe::Result {
 #[derive(Debug, Clone)]
 struct Mimic { //struct that holds full application
     display_status: String,
-    map_processor: MapProcessor
+    map_processor: MapProcessor,
+    path: String
 }
 
 impl Default for Mimic { //default values for MimicGUI
     fn default() -> Self {
         Self {
             display_status: "".to_string(),
-            map_processor: Default::default()
+            map_processor: Default::default(),
+            path: "".to_owned()
         }
     }
 }
@@ -62,6 +64,8 @@ impl eframe::App for Mimic {
             ui.heading("Welcome to Mimic!");
             if ui.button("Generate Map").clicked() {
                 self.map_processor.process_map();
+                self.path = self.map_processor.get_image_path().clone();
+                ui.label(format!("{}", self.display_status));
             }
             unsafe {
                 let gui_observer_ref = GUI_OBSERVER.get().expect("GUI_OBSERVER get failed in app update()");
@@ -72,6 +76,7 @@ impl eframe::App for Mimic {
                 }
             }
             ui.label(format!("{}", self.display_status));
+            ui.label(format!("{}", self.path));
         });
     } 
 }

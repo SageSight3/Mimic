@@ -1,0 +1,53 @@
+{
+    "name": "UY-SCUTI-1B",
+    "eons": [
+        {
+            "name": "LHB",
+            "duration": "60",
+            "generators": [
+                {
+                    "type": "IMPACT",
+                    "specification": {
+                        "frequency": {
+                            "min": "1700",
+                            "max": "NONE",
+                            "skew": "NONE"
+                        },
+                        "depth_range": {
+                            "min": "6",
+                            "max": "168",
+                            "skew": "-166"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Oceans",
+            "duration": "86",
+            "generators": [
+                {
+                    "type": "IMPACT",
+                    "specification": {
+                        "frequency": {
+                            "min": "60",
+                            "max": "178",
+                            "skew": "46"
+                        },
+                        "depth_range": {
+                            "min": "1",
+                            "max": "60",
+                            "skew": "-46"
+                        }
+                    }
+                },
+                {
+                    "type": "WATER",
+                    "specification": {
+                        "percent_volume": "70"
+                    }
+                }
+            ]
+        }
+    ]
+}
