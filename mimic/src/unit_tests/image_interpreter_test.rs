@@ -82,3 +82,8 @@ fn test_interpret_height_map() {
     }
     assert!(found_high_pixel_value);
 }
+
+#[test]
+fn test_interpret_water_map() {
+    assert!(false);
+}

@@ -30,3 +30,15 @@ fn test_placeholder_generator() {
         }
     }
 }
+
+//Still need to update generate_map() test
+#[test]
+fn test_impact_generator() {
+    assert!(false);
+}
+
+//Still need to update generate_map() test
+#[test]
+fn test_water_map_generator() {
+    assert!(false);
+}

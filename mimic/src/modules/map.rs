@@ -5,7 +5,8 @@ use rand::Rng;
 #[derive(Debug, Clone)]
 pub struct Map {
     tiles: Vec<Vec<Tile>>,
-    attrs: MapAttrs
+    attrs: MapAttrs,
+    water_volume: u64
 }
 
 impl Default for Map {
@@ -25,7 +26,8 @@ impl Map {
         
         Map {
             tiles: map_tiles,
-            attrs: map_attributes.to_owned()
+            attrs: map_attributes.to_owned(),
+            water_volume: 0
         }
     }
     
@@ -65,6 +67,18 @@ impl Map {
 
     pub fn get_mut_tile(&mut self, row: usize, col: usize) -> &mut Tile {
         &mut self.tiles[row][col]
+    }
+
+    pub fn get_water_volume(&self) -> &u64 {
+        &self.water_volume
+    }
+
+    pub fn get_mut_water_volume(&mut self) -> &mut u64 {
+        &mut self.water_volume
+    }
+
+    pub fn set_water_volume(&mut self, a_volume: &u64) {
+        self.water_volume = a_volume.clone();
     }
 
     //this will be used when needing to completely change a tile, rather than any time any

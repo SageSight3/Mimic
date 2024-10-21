@@ -1,5 +1,6 @@
 {
     "name": "UY-SCUTI-1B",
+    "base_height": "200",
     "eons": [
         {
             "name": "LHB",

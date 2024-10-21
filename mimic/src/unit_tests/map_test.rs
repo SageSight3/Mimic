@@ -49,7 +49,7 @@ fn test_constructor() {
 
 #[test]
 fn test_set_tiles() {
-    let a_map_attrs: MapAttrs = Default::default();
+    //let a_map_attrs: MapAttrs = Default::default();
     let mut a_map: Map = Default::default();
 
     let new_map = Map::new(&mut MapAttrs::new(100, 99, 46));
@@ -77,7 +77,7 @@ fn test_set_tile() {
 
 #[test]
 fn test_get_tile() {
-    let a_map_attrs: MapAttrs = Default::default();
+    //let a_map_attrs: MapAttrs = Default::default();
     let mut a_map: Map = Default::default();
     let new_tile = Tile::new(&796);
     let row: usize = 865;
@@ -89,7 +89,7 @@ fn test_get_tile() {
 
 #[test]
 fn test_get_mut_tiles() {
-    let a_map_attrs: MapAttrs = Default::default();
+    //let a_map_attrs: MapAttrs = Default::default();
     let mut a_map: Map = Default::default();
     let a_height: i32 = 4;
     for row in a_map.get_mut_tiles() {
@@ -103,7 +103,7 @@ fn test_get_mut_tiles() {
 
 #[test]
 fn test_get_mut_tile() {
-    let a_map_attrs: MapAttrs = Default::default();
+    //let a_map_attrs: MapAttrs = Default::default();
     let mut a_map: Map = Default::default();
     let a_height: i32 = 7;
     let row: usize = 445;
@@ -172,4 +172,21 @@ fn test_update_tiles() {
 
 fn inc_tiles_height(a_tile: &mut Tile) {
     a_tile.increment_height()
+}
+
+#[test]
+fn test_water_volume() {
+    let mut a_map: Map = Default::default();
+    
+    assert_eq!(*a_map.get_water_volume(), 0);
+
+    //mutable getter test
+    let mut new_volume: u64 = 3;
+    *a_map.get_mut_water_volume() = new_volume;
+    assert_eq!(*a_map.get_water_volume(), new_volume);
+
+    //setter test
+    new_volume = 53;
+    a_map.set_water_volume(&new_volume);
+    assert_eq!(*a_map.get_water_volume(), new_volume);
 }

@@ -4,7 +4,8 @@
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Tile {
-    pub height: i32
+    pub height: i32,
+    water_present: bool
 }
 
 impl Tile {
@@ -12,7 +13,8 @@ impl Tile {
     //constructor
     pub fn new(a_height: &i32) -> Tile {
         Tile {
-            height: a_height.to_owned()
+            height: a_height.to_owned(),
+            water_present: false
         }
     }
 
@@ -38,6 +40,18 @@ impl Tile {
 
     pub fn get_height(&self) -> &i32 {
         &self.height
+    }
+
+    pub fn has_water(&self) -> &bool {
+        &self.water_present
+    }
+
+    pub fn add_water(&mut self) { //maybe rename
+        self.water_present = true;
+    }
+
+    pub fn remove_water(&mut self) { //maybe rename
+        self.water_present = false;
     }
     
     //look into \/

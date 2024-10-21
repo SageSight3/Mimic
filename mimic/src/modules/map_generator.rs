@@ -1,7 +1,8 @@
 use crate::modules::map::Map;
 use rand::Rng;
 use crate::modules::feature_generators::impact_generator::ImpactGenerator;
-
+use crate::modules::feature_generators::water_map_generator::WaterMapGenerator;
+use crate::modules::feature_generators::utility::Distribution;
 //remove once removing placeholder generator
 use crate::modules::tile::Tile;
 
@@ -33,5 +34,13 @@ impl MapGenerator {
             let a_height: i32 = rand::thread_rng().gen_range(1..256);
             a_tile.set_height(a_height);
         });
+    }
+
+    pub fn impact_generator(a_map: &mut Map, frequency: &Distribution, depth_range: &Distribution) {
+
+    }
+
+    pub fn water_map_generator(a_map: &mut Map, percent_volume: u8) {
+
     }
 }

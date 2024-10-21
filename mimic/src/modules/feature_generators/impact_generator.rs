@@ -35,6 +35,7 @@ impl ImpactGenerator {
     pub fn generate_crater(a_map: &mut Map, crater_depth: u16, impact_coord: Coordinate) {
         //calculate transient radius
         //calculate rim radius
+        //look into: ((delta_x^2 + delta_y^2) <= radius^2) == (distance <= radius), both pow and sqrt are monotonic
         //create double vector, crater_tile_coords, of length radius where //outer vector should be a length of rim_radius+1
             //each row holds a vector of coordinates at 0..= radius distance from impact_coord, where radius = index
         //put info into Crater struct
@@ -54,15 +55,25 @@ impl ImpactGenerator {
     }
 }
 
-struct Crater {
+pub struct Crater {
     transient_radius: u16,
     rim_radius: u16,
     crater_depth: u16,
     tile_coords: Vec<Vec<Coordinate>>,
-    ejecta_volime: i32 //units of height removed from crater
+    ejecta_volume: u32 //units of height removed from crater
 }
 
 impl Crater {
+    pub fn new(trans_rad: u16, rim_rad: u16, depth: u16, coords: Vec<Vec<Coordinate>>) -> Crater {
+        Crater {
+            transient_radius: trans_rad,
+            rim_radius: rim_rad,
+            crater_depth: depth,
+            tile_coords: coords,
+            ejecta_volume: 0 as u32
+        }
+    }
+
     pub fn dig_transient_crater(&self, a_map: &mut Map) {
         //impact_coord_x = self.tile_coords[0][0].get_X()
         //impact_coord_y = self.tile_coords[0][0].get_Y()

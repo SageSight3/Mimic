@@ -45,6 +45,10 @@ impl ImageData {
         }
     }
 
+    pub fn interpret_water_map(&mut self) {
+        
+    }
+
     //getters, there will be no mutable getters or setters, as image data shouldn't change once it's set
     pub fn get_pixels(&self) -> &Vec<Vec<Pixel>> {
         &self.pixels

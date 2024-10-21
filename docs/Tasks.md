@@ -40,3 +40,4 @@
 * Write App Unit tests
 * Write unit tests for mark_gui_dirty and mark_gui_clean
 * Look into multithreading
+* fix gui image path print
