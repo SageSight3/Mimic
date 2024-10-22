@@ -32,7 +32,7 @@ impl ImpactGenerator {
     }
 
     //write tests for big, medium, and small craters, big = 167, small = 6, medium = 15
-    pub fn generate_crater(a_map: &mut Map, crater_depth: u16, impact_coord: Coordinate) {
+    pub fn generate_crater(&mut self, a_map: &mut Map, crater_depth: u16, impact_coord: Coordinate) {
         //calculate transient radius
         //calculate rim radius
         //look into: ((delta_x^2 + delta_y^2) <= radius^2) == (distance <= radius), both pow and sqrt are monotonic
@@ -49,7 +49,7 @@ impl ImpactGenerator {
     for initial minimum viable delivery will just distribute material uniformly across map unless tile height was
     changed to be represented by a float, material redistribution may only have the intended effect if opting for 
     target number of total passes for full map generation to be 900 */
-    pub fn place_undsitributed_material(a_map: &mut Map) {
+    pub fn place_undsitributed_material(&mut self, a_map: &mut Map) {
         //height_to_add = (undristributed_material/(a_map.get_length() * a_map.get_width())) as i32
         //a_map.update_tiles(|a_tile: &mut Tile| { a_tile.add_height(height_to_add); });
     }
@@ -57,6 +57,69 @@ impl ImpactGenerator {
     pub fn get_undistributed_height(&self) -> &u32 {
         &self.undistributed_height
     } 
+
+    pub fn crater_tiles_coords(a_map: &mut Map, total_rad: u16, impact_coord: &Coordinate) -> Vec<Vec<Coordinate>> {
+        let mut coords: Vec<Vec<Coordinate>> = Vec::new();
+        for distance in 0..=total_rad {
+            coords.push(Vec::new());
+        }
+
+        let start_y_index: usize;
+        let start_x_index: usize;
+        let end_y_index: usize;
+        let end_x_index: usize;
+
+        if *impact_coord.get_Y() < total_rad as usize { //if start_y_index would be less than 0
+            start_y_index = *a_map.get_length() - 1 - (total_rad as usize - *impact_coord.get_Y());
+        } else {
+            start_y_index = *impact_coord.get_Y() - total_rad as usize;
+        }
+
+        if *impact_coord.get_X() < total_rad as usize { //if start_x_index would be less than 0
+            start_x_index = *a_map.get_width() - 1 - (total_rad as usize - *impact_coord.get_X());
+        } else {
+            start_x_index = *impact_coord.get_X() - total_rad as usize;
+        }
+
+        //if end_y_index would be greater than a_map.length()
+        if (start_y_index + ((2*total_rad) as usize)) > *a_map.get_length() {
+            end_y_index = 0 + ((start_y_index + ((2*total_rad) as usize)) - *a_map.get_length());
+        } else {
+            end_y_index = start_y_index + ((2 * total_rad) as usize);
+        }
+
+        //if end_x_index would be greater than a_map.width()
+        if (start_x_index + ((2*total_rad) as usize)) > *a_map.get_width() {
+            end_x_index = 0 + ((start_x_index + ((2*total_rad) as usize)) - *a_map.get_width());
+        } else {
+            end_x_index = start_x_index + ((2 * total_rad) as usize);
+        }
+
+        //scan every coordinate in square where length = total_crater_diameter, beginning from 
+        //the starting indices
+        for mut y_index in start_y_index..=end_y_index {
+            if y_index >= *a_map.get_length() {
+                y_index = 0 + y_index - *a_map.get_length();
+            }
+            for mut x_index in start_x_index..=end_x_index {
+                if x_index >= *a_map.get_width() {
+                    x_index = 0 + x_index - *a_map.get_width();
+                }
+
+                //coord distance from impact coord
+                let delta_x: f32 = (*impact_coord.get_X() - x_index) as f32;
+                let delta_y: f32 = (*impact_coord.get_Y() - y_index) as f32;
+                let dist_from_center: usize = (delta_x.powi(2) + delta_y.powi(2)).sqrt() as usize;
+
+                if dist_from_center as u16 <= total_rad {
+                    coords[dist_from_center].push(Coordinate::new(x_index, y_index));
+                }
+            }
+        }
+
+        coords
+    }
+
 }
 
 pub struct Crater {

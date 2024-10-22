@@ -1,5 +1,7 @@
 {
     "name": "UY-SCUTI-1B",
+    "length": "2000",
+    "width": "2000",
     "base_height": "200",
     "eons": [
         {

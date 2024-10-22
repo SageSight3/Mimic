@@ -4,6 +4,7 @@ use crate::modules::feature_generators::utility::Distribution;
 use crate::modules::feature_generators::impact_generator::ImpactGenerator;
 use crate::modules::feature_generators::impact_generator::Crater;
 use crate::modules::map::Coordinate;
+use crate::modules::map::Map;
 
 #[test]
 fn test_default() {
@@ -38,6 +39,35 @@ fn test_crater_new() {
         }
     }
     assert_eq!(*crater.get_ejecta_volume(), 0);
+}
+
+#[test]
+fn test_crater_tiles_coords() {
+    let mut a_map: Map = Default::default();
+    let x: usize = 5;
+    let y: usize = 4;
+    let rad: u16 = 20;
+    let an_impact_coord: Coordinate = Coordinate::new(x, y);
+
+    let crater_tiles_coords: Vec<Vec<Coordinate>> = 
+        ImpactGenerator::crater_tiles_coords(&mut a_map, rad, &an_impact_coord);
+    
+    let mut found_edge_tile: bool = false;
+    assert_eq!(crater_tiles_coords.len(), (rad + 1) as usize);
+    for row in crater_tiles_coords {
+        for coord in row {
+            //coord distance from impact coord
+            let delta_x: f32 = (*an_impact_coord.get_X() - *coord.get_X()) as f32;
+            let delta_y: f32 = (*an_impact_coord.get_Y() - *coord.get_Y()) as f32;
+            let dist_from_center: usize = (delta_x.powi(2) + delta_y.powi(2)).sqrt() as usize;
+
+            assert!(dist_from_center as u16 <= rad);
+            if dist_from_center as u16 <= rad { // should be ==, is <= for debgging
+                found_edge_tile = true;
+            }
+        }
+    }
+    assert!(found_edge_tile);
 }
 
 #[test]

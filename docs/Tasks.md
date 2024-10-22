@@ -41,3 +41,4 @@
 * Write unit tests for mark_gui_dirty and mark_gui_clean
 * Look into multithreading
 * fix gui image path print
+* refactor crater_tiles_coords() in ImpactGenerator into multiple methods
