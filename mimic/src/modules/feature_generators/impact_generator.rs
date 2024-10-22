@@ -53,6 +53,10 @@ impl ImpactGenerator {
         //height_to_add = (undristributed_material/(a_map.get_length() * a_map.get_width())) as i32
         //a_map.update_tiles(|a_tile: &mut Tile| { a_tile.add_height(height_to_add); });
     }
+
+    pub fn get_undistributed_height(&self) -> &u32 {
+        &self.undistributed_height
+    } 
 }
 
 pub struct Crater {
@@ -108,5 +112,25 @@ impl Crater {
                 //x = coord.get_X()
                 //y = coord.get_Y()
                 //map.get_mut_tile(x, y).add_height(height_increase)
+    }
+
+    pub fn get_transient_radius(&self) -> &u16 {
+        &self.transient_radius
+    }
+
+    pub fn get_rim_radius(&self) -> &u16 {
+        &self.rim_radius
+    }
+
+    pub fn get_crater_depth(&self) -> &u16 {
+        &self.crater_depth
+    }
+
+    pub fn get_tile_coords(&self) -> &Vec<Vec<Coordinate>> {
+        &self.tile_coords
+    }
+
+    pub fn get_ejecta_volume(&self) -> &u32 {
+        &self.ejecta_volume
     }
 }

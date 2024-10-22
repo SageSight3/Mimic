@@ -100,6 +100,7 @@ impl Map {
     }
 }
 
+#[derive(Debug, Clone)]
 pub struct Coordinate {
     x: usize,
     y: usize
