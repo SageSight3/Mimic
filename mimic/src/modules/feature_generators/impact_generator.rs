@@ -97,10 +97,12 @@ impl ImpactGenerator {
                         y_coord += *a_map.get_length() as i16;
                     }
 
-                    if y_coord == 400{ //debug
+                    /*debug
+                    if y_coord == 400{
                         println!("{}, {}, {}", dist_from_center as i32, x_coord, y_coord);
                     }
-
+                    */
+                    
                     coords[dist_from_center.floor() as usize].push(Coordinate::new(x_coord as usize, y_coord as usize));
                 }
             }
@@ -114,7 +116,7 @@ pub struct Crater {
     transient_radius: u16,
     rim_radius: u16,
     crater_depth: u16,
-    tile_coords: Vec<Vec<Coordinate>>,
+    tiles_coords: Vec<Vec<Coordinate>>,
     ejecta_volume: u32 //units of height removed from crater
 }
 
@@ -124,7 +126,7 @@ impl Crater {
             transient_radius: trans_rad,
             rim_radius: rim_rad,
             crater_depth: depth,
-            tile_coords: coords,
+            tiles_coords: coords,
             ejecta_volume: 0 as u32
         }
     }
@@ -178,7 +180,7 @@ impl Crater {
     }
 
     pub fn get_tile_coords(&self) -> &Vec<Vec<Coordinate>> {
-        &self.tile_coords
+        &self.tiles_coords
     }
 
     pub fn get_ejecta_volume(&self) -> &u32 {

@@ -5,6 +5,7 @@ use crate::modules::feature_generators::impact_generator::ImpactGenerator;
 use crate::modules::feature_generators::impact_generator::Crater;
 use crate::modules::map::Coordinate;
 use crate::modules::map::Map;
+use rand::Rng;
 
 #[test]
 fn test_default() {
@@ -193,7 +194,7 @@ fn test_crater_tiles_coords() {
             let mut x_coord: i32 = *coord.get_X() as i32;
             if x_coord <= (*a_map.get_width() as i32 / 2) {
                 x_coord += *a_map.get_width() as i32;
-                println!("x_coord x exceeds map width: {}", x_coord.clone());
+                //println!("x_coord x exceeds map width: {}", x_coord.clone()); //debug
             }
             x_coord -= x as i32;
 
@@ -347,7 +348,37 @@ fn test_crater_tiles_coords() {
 
 #[test]
 fn test_dig_transient_crater() {
-    assert!(false);
+    let mut a_map: Map = Default::default();
+    
+    //impact coordinate
+    let x: usize = 500;
+    let y: usize = 400;
+    let mut an_impact_coord: Coordinate = Coordinate::new(x, y);
+
+    //Make crater
+    //depth and radii
+    let crater_depth: u16 = 15;
+    let trans_rad: f32 = ((crater_depth as f32 *(rand::thread_rng().gen_range(0.0..=2.0) + 3.0))/5.0).round();
+    let rim_rad: f32 = (trans_rad* (1.3 + rand::thread_rng().gen_range(0.0..=0.7))).round();
+    //convert rads to u16
+    let trans_rad: u16 = trans_rad as u16;
+    let rim_rad: u16 = rim_rad as u16;
+    //println!("trans_rad as u16: {}", trans_rad); debug
+    //println!("rim_rad as u16: {}", rim_rad); //debug
+
+    let tiles_coords: Vec<Vec<Coordinate>> = 
+        ImpactGenerator::crater_tiles_coords(&mut a_map, trans_rad + rim_rad, &an_impact_coord);
+
+    let a_crater: Crater = Crater::new(trans_rad, rim_rad, crater_depth, tiles_coords);
+
+    //get predicted height range;
+    let mut trans_crater_height_range: Vec<u16> = Vec::new();
+    for dist_from_center in 0..=trans_rad {
+
+    }
+
+
+
 }
 
 #[test]
