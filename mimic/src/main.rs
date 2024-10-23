@@ -11,6 +11,7 @@ use modules::map_processor::MapProcessor;
 use eframe::egui;
 
 fn main() {
+
     app::start_app().expect("App failed to start");
 
     /*GUI Multithread resolution idea ->look into mutexes with Rust

@@ -64,59 +64,47 @@ impl ImpactGenerator {
             coords.push(Vec::new());
         }
 
-        let start_y_index: usize;
-        let start_x_index: usize;
-        let end_y_index: usize;
-        let end_x_index: usize;
+        let rad_int: i16 = total_rad as i16;
 
-        if *impact_coord.get_Y() < total_rad as usize { //if start_y_index would be less than 0
-            start_y_index = *a_map.get_length() - 1 - (total_rad as usize - *impact_coord.get_Y());
-        } else {
-            start_y_index = *impact_coord.get_Y() - total_rad as usize;
-        }
+        let mut tile_count: i32 = 0;
 
-        if *impact_coord.get_X() < total_rad as usize { //if start_x_index would be less than 0
-            start_x_index = *a_map.get_width() - 1 - (total_rad as usize - *impact_coord.get_X());
-        } else {
-            start_x_index = *impact_coord.get_X() - total_rad as usize;
-        }
+        for y in (rad_int*-1)..=rad_int {
+            for x in (rad_int*-1)..=rad_int {
 
-        //if end_y_index would be greater than a_map.length()
-        if (start_y_index + ((2*total_rad) as usize)) > *a_map.get_length() {
-            end_y_index = 0 + ((start_y_index + ((2*total_rad) as usize)) - *a_map.get_length());
-        } else {
-            end_y_index = start_y_index + ((2 * total_rad) as usize);
-        }
+                let dist_from_center: f32 = (((x as f32).powi(2) + (y as f32).powi(2))).sqrt();
+                if dist_from_center <= rad_int as f32 {
+                    
+                    let mut x_coord: i16 = *impact_coord.get_X() as i16 + x;
+                    let mut y_coord: i16  = *impact_coord.get_Y() as i16 + y;
 
-        //if end_x_index would be greater than a_map.width()
-        if (start_x_index + ((2*total_rad) as usize)) > *a_map.get_width() {
-            end_x_index = 0 + ((start_x_index + ((2*total_rad) as usize)) - *a_map.get_width());
-        } else {
-            end_x_index = start_x_index + ((2 * total_rad) as usize);
-        }
+                    /****************************************************************
+                      * if exceeding bounds, wrap crater around to other side of map
+                    *****************************************************************/
 
-        //scan every coordinate in square where length = total_crater_diameter, beginning from 
-        //the starting indices
-        for mut y_index in start_y_index..=end_y_index {
-            if y_index >= *a_map.get_length() {
-                y_index = 0 + y_index - *a_map.get_length();
-            }
-            for mut x_index in start_x_index..=end_x_index {
-                if x_index >= *a_map.get_width() {
-                    x_index = 0 + x_index - *a_map.get_width();
-                }
+                    if x_coord >= *a_map.get_width() as i16 {
+                        x_coord -= *a_map.get_width() as i16;
+                    }
 
-                //coord distance from impact coord
-                let delta_x: f32 = (*impact_coord.get_X() - x_index) as f32;
-                let delta_y: f32 = (*impact_coord.get_Y() - y_index) as f32;
-                let dist_from_center: usize = (delta_x.powi(2) + delta_y.powi(2)).sqrt() as usize;
+                    if x_coord < 0 {
+                        x_coord += *a_map.get_width() as i16;
+                    }
 
-                if dist_from_center as u16 <= total_rad {
-                    coords[dist_from_center].push(Coordinate::new(x_index, y_index));
+                    if y_coord >= *a_map.get_length() as i16 {
+                        y_coord -= *a_map.get_length() as i16;
+                    }
+                    
+                    if y_coord < 0 {
+                        y_coord += *a_map.get_length() as i16;
+                    }
+
+                    if y_coord == 400{ //debug
+                        println!("{}, {}, {}", dist_from_center as i32, x_coord, y_coord);
+                    }
+
+                    coords[dist_from_center.floor() as usize].push(Coordinate::new(x_coord as usize, y_coord as usize));
                 }
             }
         }
-
         coords
     }
 

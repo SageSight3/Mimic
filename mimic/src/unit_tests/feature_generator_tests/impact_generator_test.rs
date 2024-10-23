@@ -43,31 +43,306 @@ fn test_crater_new() {
 
 #[test]
 fn test_crater_tiles_coords() {
+    //happy path
     let mut a_map: Map = Default::default();
-    let x: usize = 5;
-    let y: usize = 4;
-    let rad: u16 = 20;
-    let an_impact_coord: Coordinate = Coordinate::new(x, y);
+    let mut x: usize = 500;
+    let mut y: usize = 400;
+    let mut rad: u16 = 20;
+    let mut an_impact_coord: Coordinate = Coordinate::new(x, y);
 
-    let crater_tiles_coords: Vec<Vec<Coordinate>> = 
+    let mut crater_tiles_coords: Vec<Vec<Coordinate>> = 
         ImpactGenerator::crater_tiles_coords(&mut a_map, rad, &an_impact_coord);
     
     let mut found_edge_tile: bool = false;
     assert_eq!(crater_tiles_coords.len(), (rad + 1) as usize);
     for row in crater_tiles_coords {
+        assert!(row.len() > 0);
         for coord in row {
-            //coord distance from impact coord
-            let delta_x: f32 = (*an_impact_coord.get_X() - *coord.get_X()) as f32;
-            let delta_y: f32 = (*an_impact_coord.get_Y() - *coord.get_Y()) as f32;
-            let dist_from_center: usize = (delta_x.powi(2) + delta_y.powi(2)).sqrt() as usize;
+            let rad_int: i32 = rad as i32;
+            let x_coord: i32 = *coord.get_X() as i32 - x as i32;
+            let y_coord: i32 = *coord.get_Y() as i32 - y as i32;
+            assert!(((x_coord.pow(2) as f32 + y_coord.pow(2) as f32).floor()).sqrt() as i32 <= rad_int);
 
-            assert!(dist_from_center as u16 <= rad);
-            if dist_from_center as u16 <= rad { // should be ==, is <= for debgging
+            if (x_coord.pow(2) + y_coord.pow(2) == rad_int.pow(2)) {
                 found_edge_tile = true;
             }
         }
     }
     assert!(found_edge_tile);
+
+    /****************************************************************
+     * if exceeding bounds, wrap crater around to other side of map
+     ***************************************************************/
+
+    //y_coord drops below 0
+    x = 500;
+    y = 4;
+    rad = 20;
+    an_impact_coord = Coordinate::new(x, y);
+
+    crater_tiles_coords = ImpactGenerator::crater_tiles_coords(&mut a_map, rad, &an_impact_coord);
+    
+    found_edge_tile = false;
+    assert_eq!(crater_tiles_coords.len(), (rad + 1) as usize);
+    for row in crater_tiles_coords {
+        assert!(row.len() > 0);
+        for coord in row {
+            let rad_int: i32 = rad as i32;
+
+            let mut x_coord: i32 = *coord.get_X() as i32 - x as i32;
+
+            let mut y_coord: i32 = *coord.get_Y() as i32;
+            if y_coord > (*a_map.get_length() as i32 / 2) {
+                y_coord -= *a_map.get_length() as i32;
+            }
+            y_coord -= y as i32;
+
+            assert!(((x_coord.pow(2) as f32 + y_coord.pow(2) as f32).floor()).sqrt() as i32 <= rad_int);
+            if (x_coord.pow(2) + y_coord.pow(2) == rad_int.pow(2)) {
+                found_edge_tile = true;
+            }
+        }
+    }
+    assert!(found_edge_tile);
+
+    //x_coord drops below 0
+    x = 5;
+    y = 400;
+    rad = 20;
+    an_impact_coord = Coordinate::new(x, y);
+    
+    crater_tiles_coords = ImpactGenerator::crater_tiles_coords(&mut a_map, rad, &an_impact_coord);
+        
+    found_edge_tile = false;
+    assert_eq!(crater_tiles_coords.len(), (rad + 1) as usize);
+    for row in crater_tiles_coords {
+        assert!(row.len() > 0);
+        for coord in row {
+            let rad_int: i32 = rad as i32;
+
+            let mut x_coord: i32 = *coord.get_X() as i32;
+            if x_coord > (*a_map.get_width() as i32 / 2) {
+                x_coord -= *a_map.get_width() as i32;
+            }
+            x_coord -= x as i32;
+
+            let mut y_coord: i32 = *coord.get_Y() as i32 - y as i32;
+
+            assert!(((x_coord.pow(2) as f32 + y_coord.pow(2) as f32).floor()).sqrt() as i32 <= rad_int);
+            if (x_coord.pow(2) + y_coord.pow(2) == rad_int.pow(2)) {
+                found_edge_tile = true;
+            }
+        }
+    }
+    assert!(found_edge_tile);
+
+    //x_coord and y_coord drop below 0
+    x = 5;
+    y = 4;
+    rad = 20;
+    an_impact_coord = Coordinate::new(x, y);
+
+    crater_tiles_coords = ImpactGenerator::crater_tiles_coords(&mut a_map, rad, &an_impact_coord);
+    
+    found_edge_tile = false;
+    assert_eq!(crater_tiles_coords.len(), (rad + 1) as usize);
+    for row in crater_tiles_coords {
+        assert!(row.len() > 0);
+        for coord in row {
+            let rad_int: i32 = rad as i32;
+
+            let mut x_coord: i32 = *coord.get_X() as i32;
+            if x_coord > (*a_map.get_width() as i32 / 2) {
+                x_coord -= *a_map.get_width() as i32;
+            }
+            x_coord -= x as i32;
+
+            let mut y_coord: i32 = *coord.get_Y() as i32;
+            if y_coord > (*a_map.get_length() as i32 / 2) {
+                y_coord -= *a_map.get_length() as i32;
+            }
+            y_coord -= y as i32;
+
+            assert!(((x_coord.pow(2) as f32 + y_coord.pow(2) as f32).floor()).sqrt() as i32 <= rad_int);
+            if (x_coord.pow(2) + y_coord.pow(2) == rad_int.pow(2)) {
+                found_edge_tile = true;
+            }
+        }
+    }
+    assert!(found_edge_tile);
+    
+    //x_coord exceeds a_map.width()
+    x = 1995;
+    y = 400;
+    rad = 20;
+    an_impact_coord = Coordinate::new(x, y);
+    
+    crater_tiles_coords = ImpactGenerator::crater_tiles_coords(&mut a_map, rad, &an_impact_coord);
+    
+    let mut iter = 0;
+    found_edge_tile = false;
+    assert_eq!(crater_tiles_coords.len(), (rad + 1) as usize);
+    println!("outer len: {}", crater_tiles_coords.len());
+    for row in crater_tiles_coords {
+        iter += 1;
+        assert!(row.len() > 0);
+        println!("inner len: {}", row.len());
+        for coord in row {
+            let rad_int: i32 = rad as i32;
+
+            let mut x_coord: i32 = *coord.get_X() as i32;
+            if x_coord <= (*a_map.get_width() as i32 / 2) {
+                x_coord += *a_map.get_width() as i32;
+                println!("x_coord x exceeds map width: {}", x_coord.clone());
+            }
+            x_coord -= x as i32;
+
+            let mut y_coord: i32 = *coord.get_Y() as i32 - y as i32;
+
+            assert!(((x_coord.pow(2) as f32 + y_coord.pow(2) as f32).floor()).sqrt() as i32 <= rad_int);
+            if (x_coord.pow(2) + y_coord.pow(2) == rad_int.pow(2)) {
+                found_edge_tile = true;
+            }
+        }
+    }
+    assert!(found_edge_tile);
+
+    //y_coord exceeds map.length()
+    x = 500;
+    y = 1994;
+    rad = 20;
+    an_impact_coord = Coordinate::new(x, y);
+
+    crater_tiles_coords = ImpactGenerator::crater_tiles_coords(&mut a_map, rad, &an_impact_coord);
+    
+    found_edge_tile = false;
+    assert_eq!(crater_tiles_coords.len(), (rad + 1) as usize);
+    for row in crater_tiles_coords {
+        assert!(row.len() > 0);
+        for coord in row {
+            let rad_int: i32 = rad as i32;
+
+            let mut x_coord: i32 = *coord.get_X() as i32 - x as i32;
+
+            let mut y_coord: i32 = *coord.get_Y() as i32;
+            if y_coord <= (*a_map.get_length() as i32 / 2) {
+                y_coord += *a_map.get_length() as i32;
+            }
+            y_coord -= y as i32;
+
+            assert!(((x_coord.pow(2) as f32 + y_coord.pow(2) as f32).floor()).sqrt() as i32 <= rad_int);
+            if (x_coord.pow(2) + y_coord.pow(2) == rad_int.pow(2)) {
+                found_edge_tile = true;
+            }
+        }
+    }
+    assert!(found_edge_tile);
+
+    //both x_coord and y_coord exceeds map bounds
+    x = 1995;
+    y = 1994;
+    rad = 20;
+    an_impact_coord = Coordinate::new(x, y);
+
+    crater_tiles_coords = ImpactGenerator::crater_tiles_coords(&mut a_map, rad, &an_impact_coord);
+    
+    found_edge_tile = false;
+    assert_eq!(crater_tiles_coords.len(), (rad + 1) as usize);
+    for row in crater_tiles_coords {
+        assert!(row.len() > 0);
+        for coord in row {
+            let rad_int: i32 = rad as i32;
+
+            let mut x_coord: i32 = *coord.get_X() as i32;
+            if x_coord <= (*a_map.get_width() as i32 / 2) {
+                x_coord += *a_map.get_width() as i32;
+                println!("x_coord x exceeds map width: {}", x_coord.clone());
+            }
+            x_coord -= x as i32;
+
+            let mut y_coord: i32 = *coord.get_Y() as i32;
+            if y_coord <= (*a_map.get_length() as i32 / 2) {
+                y_coord += *a_map.get_length() as i32;
+            }
+            y_coord -= y as i32;
+
+            assert!(((x_coord.pow(2) as f32 + y_coord.pow(2) as f32).floor()).sqrt() as i32 <= rad_int);
+            if (x_coord.pow(2) + y_coord.pow(2) == rad_int.pow(2)) {
+                found_edge_tile = true;
+            }
+        }
+    }
+    assert!(found_edge_tile);
+
+        //x_coord exceeds map.width(), y_coord drops below 0
+        x = 1995;
+        y = 5;
+        rad = 20;
+        an_impact_coord = Coordinate::new(x, y);
+    
+        crater_tiles_coords = ImpactGenerator::crater_tiles_coords(&mut a_map, rad, &an_impact_coord);
+        
+        found_edge_tile = false;
+        assert_eq!(crater_tiles_coords.len(), (rad + 1) as usize);
+        for row in crater_tiles_coords {
+            assert!(row.len() > 0);
+            for coord in row {
+                let rad_int: i32 = rad as i32;
+                let mut x_coord: i32 = *coord.get_X() as i32;
+                if x_coord <= (*a_map.get_width() as i32 / 2) {
+                    x_coord += *a_map.get_width() as i32;
+                    println!("x_coord x exceeds map width: {}", x_coord.clone());
+                }
+                x_coord -= x as i32;
+    
+                let mut y_coord: i32 = *coord.get_Y() as i32;
+                if y_coord > (*a_map.get_length() as i32 / 2) {
+                    y_coord -= *a_map.get_length() as i32;
+                }
+                y_coord -= y as i32;
+    
+                assert!(((x_coord.pow(2) as f32 + y_coord.pow(2) as f32).floor()).sqrt() as i32 <= rad_int);
+                if (x_coord.pow(2) + y_coord.pow(2) == rad_int.pow(2)) {
+                    found_edge_tile = true;
+                }
+            }
+        }
+        assert!(found_edge_tile);
+
+        //x_coord drops below 0, y_coord exceeds map.length()
+        x = 5;
+        y = 1994;
+        rad = 20;
+        an_impact_coord = Coordinate::new(x, y);
+    
+        crater_tiles_coords = ImpactGenerator::crater_tiles_coords(&mut a_map, rad, &an_impact_coord);
+        
+        found_edge_tile = false;
+        assert_eq!(crater_tiles_coords.len(), (rad + 1) as usize);
+        for row in crater_tiles_coords {
+            assert!(row.len() > 0);
+            for coord in row {
+                let rad_int: i32 = rad as i32;
+                let mut x_coord: i32 = *coord.get_X() as i32;
+                if x_coord > (*a_map.get_width() as i32 / 2) {
+                    x_coord -= *a_map.get_width() as i32;
+                    println!("x_coord x exceeds map width: {}", x_coord.clone());
+                }
+                x_coord -= x as i32;
+    
+                let mut y_coord: i32 = *coord.get_Y() as i32;
+                if y_coord <= (*a_map.get_length() as i32 / 2) {
+                    y_coord += *a_map.get_length() as i32;
+                }
+                y_coord -= y as i32;
+    
+                assert!(((x_coord.pow(2) as f32 + y_coord.pow(2) as f32).floor()).sqrt() as i32 <= rad_int);
+                if (x_coord.pow(2) + y_coord.pow(2) == rad_int.pow(2)) {
+                    found_edge_tile = true;
+                }
+            }
+        }
+        assert!(found_edge_tile);
 }
 
 #[test]
