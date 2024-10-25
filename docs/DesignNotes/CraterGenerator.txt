@@ -79,6 +79,7 @@ crater radius formula
 	//C++
 	transient_radius_actual = (crater depth * (rand() % 2) + 3))/5.0
 		//from real world observations, transient crater radii relative to depth line up with reality
+		needs to be divided by 2 to accomodate differing scales (1 height = 100m, 1 tile = 5km x 5km)
 	transient_radius = round(transient_radius_actual)
 	rim_radius = round(transient_radius_actual * (1.3 + (rand() % 0.7)))
 
@@ -87,3 +88,7 @@ Note: crater depth does is for full transient crater depth, crater will not be t
 
 Have different sub generators for different sizes of crater radius (radius > 9)?
 
+for adding central peaks to crater center
+	look into <constant>cos(x)+x^2 - <constant>
+
+maybe have ech height unit represent 300 meters of height?

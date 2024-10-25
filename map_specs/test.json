@@ -37,7 +37,7 @@
                             "max": "178",
                             "skew": "46"
                         },
-                        "depth_range": {
+                        "visible_depth_range": {
                             "min": "1",
                             "max": "60",
                             "skew": "-46"

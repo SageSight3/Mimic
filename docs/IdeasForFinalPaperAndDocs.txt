@@ -32,7 +32,7 @@ Optimization
 update_tiles function
 crater generation algorithm
 Results
-
+inconsisten research (crater depth)
 
 crates/libraries used so far:
 eframe

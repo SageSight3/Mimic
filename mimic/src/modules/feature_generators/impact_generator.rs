@@ -110,51 +110,68 @@ impl ImpactGenerator {
         coords
     }
 
+    pub fn calculate_transient_radius() {
+
+    }
+
+    pub fn calculate_rim_radius() {
+
+    }
 }
 
 pub struct Crater {
     transient_radius: u16,
     rim_radius: u16,
+    impact_coord_height: u16,
     crater_depth: u16,
+    //visible_depth: u16,
     tiles_coords: Vec<Vec<Coordinate>>,
     ejecta_volume: u32 //units of height removed from crater
 }
 
 impl Crater {
-    pub fn new(trans_rad: u16, rim_rad: u16, depth: u16, coords: Vec<Vec<Coordinate>>) -> Crater {
+    pub fn new(trans_rad: u16, rim_rad: u16, impact_height: u16, depth: u16, coords: Vec<Vec<Coordinate>>) -> Crater {
         Crater {
             transient_radius: trans_rad,
             rim_radius: rim_rad,
+            impact_coord_height: impact_height,
             crater_depth: depth,
+            //visible_depth: depth*3, //based off research, crater depth we can see is usually only around 1/3 of the crater's total depth
             tiles_coords: coords,
             ejecta_volume: 0 as u32
         }
     }
 
-    pub fn dig_transient_crater(&self, a_map: &mut Map) {
-        //impact_coord_x = self.tile_coords[0][0].get_X()
-        //impact_coord_y = self.tile_coords[0][0].get_Y()
-        //impact_coord_height = a_map.get_tile(impact_coord_x, impact_coord_y).get_height()
+    pub fn dig_transient_crater(&mut self, a_map: &mut Map) {
 
-        //loop through self.tile_coords from 0..=self.transient_radius,
-            //calculate depth at radius = current_index
-            //transient_ring = self.tile_coords[currentIndex]
-            //loop through each coordinate in transient_ring
-                //x = coord.get_X()
-                //y = coord.get_Y()
+        //for finding height at distance, d, from center of crater
+        let mut trans_crater_height_range: Vec<u16> = Vec::new();
+        //var names from ax^2 - c
+        let ax_dividend: f32 = /*3.0 * */ (self.transient_radius as f32).powi(2);
+        //3.0 from research that excavation depthing is usually only about a third of total crater depth
+        let c: f32 = self.crater_depth as f32;
 
-                //old_tile_height = a_map.get_mut_tile(x, y).get_height()
-                //new_height = impact_coord_height - depth
-                
-                //if old_tile_height < new_height
-                    //continue
-                //else
-                    //a_map.get_mut_tile(x, y).set_height(new_height)
-                    //ejecta_volume += ((2/3)*(old_tile_height - new_tile_height)) //2/3 based off impact crater research
-  
-        //change height and add ejecta from tile at center of crater
-        //a_map.get_mut_tile(impact_coord_x, impact_coord_y).remove_height(self.max_depth)
-        //ejecta_volume += ((2/3)*self.max_depth)
+        for (dist_from_center, coords_at_dist) in self.tiles_coords.iter().enumerate() {
+            if dist_from_center as u16 > self.transient_radius {
+                break;
+            }
+            //find height at dist_from_center from crater center
+            let ax_divisor: f32 = (self.crater_depth as f32) * (dist_from_center as f32).powi(2);
+            let height_diff: f32 =  (ax_divisor/ax_dividend) - c;
+            let height: u16 = ((self.impact_coord_height as f32 + height_diff).floor()) as u16;
+
+            println!("height: {}, dist: {}", height, dist_from_center);
+            for coord in coords_at_dist {
+                let mut a_tile = a_map.get_mut_tile(*coord.get_X(), *coord.get_Y());
+                if *a_tile.get_height() as u16 > height {
+                    let old_height: u32 = a_tile.get_height().clone() as u32;
+                    //println!("old_tile_height: {}", *a_tile.get_height());
+                    a_tile.set_height(height as i32);
+                    //println!("tile_height: {}", *a_tile.get_height());
+                    self.ejecta_volume += (old_height - height as u32);
+                }
+            }
+        }
     }
 
     pub fn build_crater_rim(&self, a_map: &mut Map) {
@@ -175,11 +192,15 @@ impl Crater {
         &self.rim_radius
     }
 
+    pub fn get_impact_height(&self) -> &u16 {
+        &self.impact_coord_height
+    }
+
     pub fn get_crater_depth(&self) -> &u16 {
         &self.crater_depth
     }
 
-    pub fn get_tile_coords(&self) -> &Vec<Vec<Coordinate>> {
+    pub fn get_tiles_coords(&self) -> &Vec<Vec<Coordinate>> {
         &self.tiles_coords
     }
 

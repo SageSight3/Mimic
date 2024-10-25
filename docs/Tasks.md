@@ -30,6 +30,7 @@
 * Once placeholder functionality's implemented, compile and benchmark a release build
 * Commment code
 * Implement basic eons
+* review transient crater depth height calculation, may need to do the same for rim radius
 
 ### Low Priority
 
