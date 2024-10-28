@@ -8,4 +8,6 @@ Implementation of Map Processor
 Added mutable getters to map and map processor
 Set up overserver with GUI and map processor
     implemented basic MVC
-
+Implemented basic image interepreter
+Implemented basic image generator
+Implemented transient crater algorithm
