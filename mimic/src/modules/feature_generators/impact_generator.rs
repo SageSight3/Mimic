@@ -109,17 +109,12 @@ impl ImpactGenerator {
         }
         coords
     }
-
-    pub fn calculate_transient_radius() {
-
-    }
-
-    pub fn calculate_rim_radius() {
-
-    }
 }
 
 pub struct Crater {
+    //a value between 3 and 4, inclusively, to vary transient radius between craters of equal max crater depth, is also needed to be
+    //accounted for in depth at distance, x, calculation for transient crater
+    variance: f32, 
     transient_radius: u16,
     rim_radius: u16,
     impact_coord_height: u16,
@@ -130,8 +125,10 @@ pub struct Crater {
 }
 
 impl Crater {
-    pub fn new(trans_rad: u16, rim_rad: u16, impact_height: u16, depth: u16, coords: Vec<Vec<Coordinate>>) -> Crater {
+    pub fn new(vari: f32, trans_rad: u16, rim_rad: u16, impact_height: u16, depth: u16, coords: Vec<Vec<Coordinate>>) -> Crater {
+        println!("vari in Crater::new(): {}", vari);
         Crater {
+            variance: vari,
             transient_radius: trans_rad,
             rim_radius: rim_rad,
             impact_coord_height: impact_height,
@@ -147,27 +144,28 @@ impl Crater {
         //for finding height at distance, d, from center of crater
         let mut trans_crater_height_range: Vec<u16> = Vec::new();
         //var names from ax^2 - c
-        let ax_dividend: f32 = /*3.0 * */ (self.transient_radius as f32).powi(2);
-        //3.0 from research that excavation depthing is usually only about a third of total crater depth
+        let ax_dividend: f32 = (self.crater_depth as f32) * (self.variance.powi(2));
         let c: f32 = self.crater_depth as f32;
 
         for (dist_from_center, coords_at_dist) in self.tiles_coords.iter().enumerate() {
             if dist_from_center as u16 > self.transient_radius {
                 break;
             }
+
             //find height at dist_from_center from crater center
-            let ax_divisor: f32 = (self.crater_depth as f32) * (dist_from_center as f32).powi(2);
+            let ax_divisor: f32 = 9.0 * (dist_from_center as f32).powi(2);
             let height_diff: f32 =  (ax_divisor/ax_dividend) - c;
             let height: u16 = ((self.impact_coord_height as f32 + height_diff).floor()) as u16;
 
-            println!("height: {}, dist: {}", height, dist_from_center);
+            //println!("height: {}, dist: {}", height, dist_from_center);
             for coord in coords_at_dist {
                 let mut a_tile = a_map.get_mut_tile(*coord.get_X(), *coord.get_Y());
                 if *a_tile.get_height() as u16 > height {
                     let old_height: u32 = a_tile.get_height().clone() as u32;
                     //println!("old_tile_height: {}", *a_tile.get_height());
                     a_tile.set_height(height as i32);
-                    //println!("tile_height: {}", *a_tile.get_height());
+
+                    //add carved out volume to ejecta for post-crater-gen redstribution
                     self.ejecta_volume += (old_height - height as u32);
                 }
             }
@@ -182,6 +180,10 @@ impl Crater {
                 //x = coord.get_X()
                 //y = coord.get_Y()
                 //map.get_mut_tile(x, y).add_height(height_increase)
+    }
+
+    pub fn get_variance(&self) -> &f32 {
+        &self.variance
     }
 
     pub fn get_transient_radius(&self) -> &u16 {

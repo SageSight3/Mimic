@@ -19,6 +19,7 @@ fn test_default() {
 #[test]
 fn test_crater_new() {
     //settup
+    let vari: f32 = 3.4434343;
     let trans_rad: u16 = 6;
     let rim_rad: u16 = 11;
     let impact_height: u16 = 3;
@@ -30,8 +31,9 @@ fn test_crater_new() {
     let coords: Vec<Vec<Coordinate>> = vec![vec![Coordinate::new(x, y); width]; length];
 
     //test
-    let crater: Crater = Crater::new(trans_rad, rim_rad, impact_height ,depth, coords);
+    let crater: Crater = Crater::new(vari, trans_rad, rim_rad, impact_height ,depth, coords);
 
+    assert_eq!(*crater.get_variance(), vari);
     assert_eq!(*crater.get_transient_radius(), trans_rad);
     assert_eq!(*crater.get_rim_radius(), rim_rad);
     assert_eq!(*crater.get_impact_height(), impact_height);
@@ -384,10 +386,11 @@ fn test_dig_transient_crater() {
     let mut an_impact_coord: Coordinate = Coordinate::new(x, y);
 
     //Make crater
-    //depth and radii
+    //depth, radii, and variance
     let an_impact_coord_height: u16 = *a_map.get_tile(x, y).get_height() as u16;
     let crater_depth: u16 = 15;
-    let trans_rad: f32 = ((crater_depth as f32 *(rand::thread_rng().gen_range(0.0..=2.0) + 3.0))/5.0).round();
+    let vari: f32 = rand::thread_rng().gen_range(3.0..=4.0);
+    let trans_rad: f32 = (vari*(crater_depth as f32))/3.0;
     let rim_rad: f32 = (trans_rad* (1.3 + rand::thread_rng().gen_range(0.0..=0.7))).round();
     //convert rads to u16
     let trans_rad: u16 = trans_rad as u16;
@@ -398,16 +401,15 @@ fn test_dig_transient_crater() {
     let tiles_coords: Vec<Vec<Coordinate>> = 
         ImpactGenerator::crater_tiles_coords(&mut a_map, trans_rad + rim_rad, &an_impact_coord);
 
-    let mut a_crater: Crater = Crater::new(trans_rad, rim_rad,an_impact_coord_height, crater_depth, tiles_coords);
+    let mut a_crater: Crater = Crater::new(vari, trans_rad, rim_rad,an_impact_coord_height, crater_depth, tiles_coords);
 
     //get predicted height range
     let mut trans_crater_height_range: Vec<u16> = Vec::new();
     //var names from ax^2 - c
-    let ax_dividend: f32 = /*3.0 * */ (trans_rad as f32).powi(2);
-    //3.0 from research that excavation depthing is usually only about a third of total crater depth
+    let ax_dividend: f32 = (crater_depth as f32) * (vari.powi(2));
     let c: f32 = crater_depth as f32;
     for dist_from_center in 0..=trans_rad {
-        let ax_divisor: f32 = (crater_depth as f32) * (dist_from_center as f32).powi(2);
+        let ax_divisor: f32 = 9.0 * (dist_from_center as f32).powi(2);
         
         //find height at dist_from_center from impact_coordinate
         let height_diff: f32 =  (ax_divisor/ax_dividend) - c;
@@ -442,6 +444,44 @@ fn test_dig_transient_crater() {
 
 #[test]
 fn test_build_crater_rim() {
+
+    //setup
+    let mut a_map: Map = Default::default();
+    a_map.update_tiles(|a_tile: &mut Tile| {
+        a_tile.set_height(200);
+    });
+
+    //impact coordinate
+    let x: usize = 500;
+    let y: usize = 400;
+    let mut an_impact_coord: Coordinate = Coordinate::new(x, y);
+
+    //Make crater
+    //depth, radii, and variance
+    let an_impact_coord_height: u16 = *a_map.get_tile(x, y).get_height() as u16;
+    let crater_depth: u16 = 15;
+    let vari: f32 = rand::thread_rng().gen_range(3.0..=4.0);
+    let trans_rad: f32 = (vari*(crater_depth as f32))/3.0;
+    let rim_rad: f32 = (trans_rad* (1.3 + rand::thread_rng().gen_range(0.0..=0.7))).round();
+
+    //convert rads to u16
+    let trans_rad: u16 = trans_rad as u16;
+    let rim_rad: u16 = rim_rad as u16;
+
+    let tiles_coords: Vec<Vec<Coordinate>> = 
+        ImpactGenerator::crater_tiles_coords(&mut a_map, trans_rad + rim_rad, &an_impact_coord);
+
+    let mut a_crater: Crater = Crater::new(vari, trans_rad, rim_rad,an_impact_coord_height, crater_depth, tiles_coords);
+
+    //get predicted added_height range
+    let mut rim_added_height_range: Vec<u16> = Vec::new();
+    for dist_from_center in (trans_rad + 1)..=rim_rad {
+
+    }
+
+    //test
+    //...
+    
     assert!(false);
 }
 

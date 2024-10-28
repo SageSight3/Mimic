@@ -73,7 +73,12 @@ Beyond crater lip? if performance allows:
 Crater rim radius (assuming from crater center) is 1.3x to 1.9x the radius of the transient crater
 	crater rim height:diameter ratio will be 
 		.2x diameter for craters where transient crater radius <= 15km,
-		.08-.8 for craters where transient crater diameter > 15km
+		.08-.8 for craters where transient crater diameter > 15km <- look into
+			look into implementing later
+			simplified version: crater height:diameter ratio ~ .1 - .15x diameter
+				for now, due to research inconsistencies, just use .1, since seems like safe bet
+
+crater rim height - is the height from the pre-crater surface level to the top of the crater rim
 
 crater radius formula
 	//C++

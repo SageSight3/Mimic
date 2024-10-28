@@ -1,20 +1,5 @@
 # Tasks
 
-## Completed
-
-* Build base GUI
-* Temporary map generation
-    * create base map data structure, to outline base map data interpreter and image gernerator
-* Refactor map generation to be in Map Processor
-* Write Map Processor unit tests for map generation
-* Refactor GUI MVC and multithreading to be cleaner
-    * remove if left unused
-* Temporary Image Interpreter
-    * implement temporary image interpreter so a image generator can be implemented
-* Image Generator
-    * take interpreted map data and output an image
-* Generate map image using placeholder generator
-
 ## In Progress
 * Design Map Specification IN PROGRESS - **MEDIUM**
 * Build crater generator
@@ -30,7 +15,8 @@
 * Once placeholder functionality's implemented, compile and benchmark a release build
 * Commment code
 * Implement basic eons
-* review transient crater depth height calculation, may need to do the same for rim radius
+* refactor impact generator implementation an unit tests so that Crater::new() only needs crater depth and map to make a crater
+    * will need to move crater_tile_coords()
 
 ### Low Priority
 
@@ -43,3 +29,19 @@
 * Look into multithreading
 * fix gui image path print
 * refactor crater_tiles_coords() in ImpactGenerator into multiple methods
+
+## Completed
+
+* Build base GUI
+* Temporary map generation
+    * create base map data structure, to outline base map data interpreter and image gernerator
+* Refactor map generation to be in Map Processor
+* Write Map Processor unit tests for map generation
+* Refactor GUI MVC and multithreading to be cleaner
+    * remove if left unused
+* Temporary Image Interpreter
+    * implement temporary image interpreter so a image generator can be implemented
+* Image Generator
+    * take interpreted map data and output an image
+* Generate map image using placeholder generator
+* review transient crater depth height calculation, may need to do the same for rim radius
