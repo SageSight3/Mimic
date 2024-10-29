@@ -58,13 +58,13 @@ impl ImpactGenerator {
         &self.undistributed_height
     } 
 
-    pub fn crater_tiles_coords(a_map: &mut Map, total_rad: u16, impact_coord: &Coordinate) -> Vec<Vec<Coordinate>> {
+    pub fn crater_tiles_coords(a_map: &mut Map, rim_rad: u16, impact_coord: &Coordinate) -> Vec<Vec<Coordinate>> {
         let mut coords: Vec<Vec<Coordinate>> = Vec::new();
-        for distance in 0..=total_rad {
+        for distance in 0..=rim_rad {
             coords.push(Vec::new());
         }
 
-        let rad_int: i16 = total_rad as i16;
+        let rad_int: i16 = rim_rad as i16;
 
         let mut tile_count: i32 = 0;
 
@@ -126,7 +126,7 @@ pub struct Crater {
 
 impl Crater {
     pub fn new(vari: f32, trans_rad: u16, rim_rad: u16, impact_height: u16, depth: u16, coords: Vec<Vec<Coordinate>>) -> Crater {
-        println!("vari in Crater::new(): {}", vari);
+        //println!("vari in Crater::new(): {}", vari);
         Crater {
             variance: vari,
             transient_radius: trans_rad,

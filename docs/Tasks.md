@@ -20,6 +20,7 @@
 
 ### Low Priority
 
+* investigate build_crater_rim() in Impact generator to see if can fix occasional crater where rim radius ends with height_to_add for decreasing slope = 2
 * Refactor GUI for MVC and multithreading
     * look into enums
     * at bare minimum have map_processor.process_map() fork onto a different thread than the main app

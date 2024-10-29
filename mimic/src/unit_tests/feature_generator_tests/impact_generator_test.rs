@@ -1,3 +1,5 @@
+use std::cmp::max;
+
 #[cfg(test)]
 use super::*;
 use crate::modules::feature_generators::utility::Distribution;
@@ -201,11 +203,11 @@ fn test_crater_tiles_coords() {
     let mut iter = 0;
     found_edge_tile = false;
     assert_eq!(crater_tiles_coords.len(), (rad + 1) as usize);
-    println!("outer len: {}", crater_tiles_coords.len());
+    //println!("outer len: {}", crater_tiles_coords.len());
     for row in crater_tiles_coords {
         iter += 1;
         assert!(row.len() > 0);
-        println!("inner len: {}", row.len());
+        //println!("inner len: {}", row.len());
         for coord in row {
             let rad_int: i32 = rad as i32;
 
@@ -279,7 +281,7 @@ fn test_crater_tiles_coords() {
             let mut x_coord: i32 = *coord.get_X() as i32;
             if x_coord <= (*a_map.get_width() as i32 / 2) {
                 x_coord += *a_map.get_width() as i32;
-                println!("x_coord x exceeds map width: {}", x_coord.clone());
+                //println!("x_coord x exceeds map width: {}", x_coord.clone());
             }
             x_coord -= x as i32;
 
@@ -316,7 +318,7 @@ fn test_crater_tiles_coords() {
                 let mut x_coord: i32 = *coord.get_X() as i32;
                 if x_coord <= (*a_map.get_width() as i32 / 2) {
                     x_coord += *a_map.get_width() as i32;
-                    println!("x_coord x exceeds map width: {}", x_coord.clone());
+                    //println!("x_coord x exceeds map width: {}", x_coord.clone());
                 }
                 x_coord -= x as i32;
     
@@ -353,7 +355,7 @@ fn test_crater_tiles_coords() {
                 let mut x_coord: i32 = *coord.get_X() as i32;
                 if x_coord > (*a_map.get_width() as i32 / 2) {
                     x_coord -= *a_map.get_width() as i32;
-                    println!("x_coord x exceeds map width: {}", x_coord.clone());
+                    //println!("x_coord x exceeds map width: {}", x_coord.clone());
                 }
                 x_coord -= x as i32;
     
@@ -393,8 +395,8 @@ fn test_dig_transient_crater() {
     let trans_rad: f32 = (vari*(crater_depth as f32))/3.0;
     let rim_rad: f32 = (trans_rad* (1.3 + rand::thread_rng().gen_range(0.0..=0.7))).round();
     //convert rads to u16
-    let trans_rad: u16 = trans_rad as u16;
-    let rim_rad: u16 = rim_rad as u16;
+    let trans_rad: u16 = trans_rad.round() as u16;
+    let rim_rad: u16 = rim_rad.round() as u16;
     //println!("trans_rad as u16: {}", trans_rad); debug
     //println!("rim_rad as u16: {}", rim_rad); //debug
 
@@ -444,45 +446,134 @@ fn test_dig_transient_crater() {
 
 #[test]
 fn test_build_crater_rim() {
+    //running 100 trials to ensure confidence across a large number of possible crater variances
+    for trial in 0..=100 {
+        //setup
+        let mut a_map: Map = Default::default();
+        a_map.update_tiles(|a_tile: &mut Tile| {
+            a_tile.set_height(200);
+        });
 
-    //setup
-    let mut a_map: Map = Default::default();
-    a_map.update_tiles(|a_tile: &mut Tile| {
-        a_tile.set_height(200);
-    });
+        //impact coordinate
+        let x: usize = 500;
+        let y: usize = 400;
+        let mut an_impact_coord: Coordinate = Coordinate::new(x, y);
 
-    //impact coordinate
-    let x: usize = 500;
-    let y: usize = 400;
-    let mut an_impact_coord: Coordinate = Coordinate::new(x, y);
+        //Make crater
+        //depth, radii, and variance
+        let an_impact_coord_height: u16 = *a_map.get_tile(x, y).get_height() as u16;
+        let crater_depth: u16 = 15;
+        let vari: f32 = rand::thread_rng().gen_range(3.0..=4.0);
+        let trans_rad: f32 = (vari*(crater_depth as f32))/3.0;
+        let rim_rad: f32 = (trans_rad * (1.3 + rand::thread_rng().gen_range(0.0..=0.7))).round();
 
-    //Make crater
-    //depth, radii, and variance
-    let an_impact_coord_height: u16 = *a_map.get_tile(x, y).get_height() as u16;
-    let crater_depth: u16 = 15;
-    let vari: f32 = rand::thread_rng().gen_range(3.0..=4.0);
-    let trans_rad: f32 = (vari*(crater_depth as f32))/3.0;
-    let rim_rad: f32 = (trans_rad* (1.3 + rand::thread_rng().gen_range(0.0..=0.7))).round();
+        //convert rads to u16
+        let trans_rad: u16 = trans_rad.round() as u16;
+        let rim_rad: u16 = rim_rad.round() as u16;
+        //println!("trans_rad: {}", trans_rad);
+        //println!("rim_rad: {}", rim_rad);
 
-    //convert rads to u16
-    let trans_rad: u16 = trans_rad as u16;
-    let rim_rad: u16 = rim_rad as u16;
+        let tiles_coords: Vec<Vec<Coordinate>> = 
+            ImpactGenerator::crater_tiles_coords(&mut a_map, trans_rad + rim_rad, &an_impact_coord);
 
-    let tiles_coords: Vec<Vec<Coordinate>> = 
-        ImpactGenerator::crater_tiles_coords(&mut a_map, trans_rad + rim_rad, &an_impact_coord);
+        let mut a_crater: Crater = Crater::new(vari, trans_rad, rim_rad,an_impact_coord_height, crater_depth, tiles_coords);
 
-    let mut a_crater: Crater = Crater::new(vari, trans_rad, rim_rad,an_impact_coord_height, crater_depth, tiles_coords);
+        /************************************
+        * get predicted added_height range *
+        ************************************/
 
-    //get predicted added_height range
-    let mut rim_added_height_range: Vec<u16> = Vec::new();
-    for dist_from_center in (trans_rad + 1)..=rim_rad {
+        let mut rim_added_height_range: Vec<u16> = Vec::new();
+        let max_added_height: f32 = ((0.1) * (2.0 * trans_rad as f32));
+        let rounded_max: f32 = max_added_height.round();
+        //println!("max_added_height: {}", max_added_height);
 
+        //upward slope to max_added_height from crater center
+        let ax_dividend: f32 = (crater_depth as f32) * (vari.powi(2));
+        let c: f32 = crater_depth as f32;
+        let mut max_height_dist: u16 = 65535;
+
+        for dist_from_center in (trans_rad + 1)..=rim_rad {
+            let ax_divisor: f32 = 9.0 * (dist_from_center as f32).powi(2);
+            let height_to_add: f32 =  ((ax_divisor/ax_dividend) - c).round();
+            if height_to_add > rounded_max {
+                max_height_dist = dist_from_center;
+                //println!("max_height_dist: {}", max_height_dist);
+                break;
+            }
+            
+            //convert height_to_add to a u16
+            let height_to_add: u16 = height_to_add as u16;
+            //println!("height_to_add, increasing slope: {}", height_to_add);
+            rim_added_height_range.push(height_to_add);
+        }
+
+        //test upward slope height range from crater center
+        for height_to_add in rim_added_height_range.clone() {
+            assert!(height_to_add <= rounded_max as u16);
+        }
+
+        //downward slope from max_height_dist to crater edge, refer to rim_height_math.png for name definitions
+        let md: u16 = max_height_dist - trans_rad;
+        //println!("md: {}", md);
+        let dividend: f32 = (trans_rad as f32 + md as f32);
+
+        for dist_from_center in (max_height_dist)..=rim_rad {
+            let divisor: f32 = max_added_height * (dist_from_center as f32 - (trans_rad as f32 - md as f32));
+
+            let height_to_add: u16 = (max_added_height as f32 - (divisor/dividend)).round() as u16;
+            //println!("height_to_add, decreasing slope: {}", height_to_add);
+            rim_added_height_range.push(height_to_add);
+        }
+
+        //test downward slope height range from crater center
+        for height_to_add in rim_added_height_range.clone() {
+            //println!("{}", height_to_add);
+            assert!(rounded_max as u16 >= height_to_add && height_to_add >= 0);
+        }
+
+        /************************
+         * test build_crater_rim
+         ************************/
+        
+        //get coordinates to be tested
+        let mut rim_tiles: Vec<Vec<Coordinate>> = Vec::new();
+
+        for index in (trans_rad as usize + 1)..=rim_rad as usize {
+            rim_tiles.push(a_crater.get_tiles_coords()[index].clone());
+
+            //make sure rim_tiles added the row successfully
+            assert_eq!(rim_tiles[index - (trans_rad as usize + 1)].len(), a_crater.get_tiles_coords()[index].len());
+        }
+        //make sure rim_tiles added the all target rows, + 1 to rim_rad - (trans_rad + 1) due to len being one bigger than range of
+        //rim_tiles' slice of a_crater.tiles_coords
+        assert_eq!(rim_tiles.len(), (rim_rad-(trans_rad + 1) + 1) as usize);
+
+        let mut old_tile_heights: Vec<Vec<i32>> = Vec::new();
+        for (index,row) in rim_tiles.iter().enumerate() {
+            old_tile_heights.push(Vec::new());
+            for coord in row {
+                let an_old_height: i32 = a_map.get_tile(*coord.get_X(), *coord.get_Y()).get_height().clone();
+                old_tile_heights[index].push(an_old_height);
+                //println!("{}", an_old_height);
+            }
+            assert_eq!(old_tile_heights[index].len(), row.len());
+        }
+        assert_eq!(old_tile_heights.len(), rim_tiles.len());
+
+        a_crater.build_crater_rim(&mut a_map);
+        
+        //test height at each tile in crater rim
+        for (rowIndex, row) in rim_tiles.iter().enumerate() {
+            //println!("{}", rim_added_height_range[rowIndex]);
+            for (coordIndex, coord) in row.iter().enumerate() {
+                let tile_to_test: &Tile = a_map.get_tile(*coord.get_X(), *coord.get_Y());
+                if *tile_to_test.get_height() <= old_tile_heights[rowIndex][coordIndex] + rim_added_height_range[rowIndex] as i32 {
+                    //println!("tile_height: {}", tile_to_test.get_height());
+                }
+                assert_eq!(*tile_to_test.get_height(), (old_tile_heights[rowIndex][coordIndex] + rim_added_height_range[rowIndex] as i32));
+            }
+        }
     }
-
-    //test
-    //...
-    
-    assert!(false);
 }
 
 #[test]
