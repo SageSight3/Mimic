@@ -39,7 +39,7 @@ impl ImageData {
         for rowIndex in 0..self.map.get_tiles().len() {
             let row = &self.map.get_tiles()[rowIndex];
             for colIndex in 0..row.len() {
-                let a_height: i32 = *self.map.get_tile(rowIndex, colIndex).get_height();
+                let a_height: i32 = (*self.map.get_tile(rowIndex, colIndex).get_height()).abs();
 
                 if a_height < min_height { min_height = a_height; }
                 if a_height > max_height { max_height = a_height; }
@@ -58,7 +58,7 @@ impl ImageData {
             let row = &self.map.get_tiles()[rowIndex];
             for colIndex in 0..row.len() {
 
-                let mut trimmed_height: i32 = *self.map.get_tile(rowIndex, colIndex).get_height() - min_height;
+                let mut trimmed_height: i32 = (*self.map.get_tile(rowIndex, colIndex).get_height()).abs() - min_height;
                 while trimmed_height > 256 {
                     trimmed_height = trimmed_height / 2;
                 }

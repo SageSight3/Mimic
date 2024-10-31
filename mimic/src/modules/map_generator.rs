@@ -28,8 +28,8 @@ impl MapGenerator {
 
         //temp until better implementation/specification implementation
         //impact generation
-        let frequency: Distribution = Distribution::new(150, 250, 75);
-        let depth_range: Distribution = Distribution::new(3, 168, -166);
+        let frequency: Distribution = Distribution::new(150, 600, 75);
+        let depth_range: Distribution = Distribution::new(3, 75, -74);
         let impact_generator_delegate: ImpactGeneratorDelegate = ImpactGeneratorDelegate::new(
             &frequency, 
             &depth_range

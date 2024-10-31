@@ -9,7 +9,8 @@
 * Write Map Processor unit tests for map generation - TEMP VERSION DONE
 * Build water map generation
 * Digitize written documentation
-* add overflow error impact_generator line 198, self.ejecta_volume += (new_height - old_height)
+* add overflow error impact_generator line 198, self.ejecta_volume += (new_height - old_height), could be causing more serious issues than initially realized
+* rim max adsed height adjustments for larger craters (if rad is to big, maybe multiplier should shrink by an order of magnitude)
 
 ### Medium Priority
 * Once placeholder functionality's implemented, compile and benchmark a release build

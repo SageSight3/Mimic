@@ -33,7 +33,7 @@ impl Distribution {
             }
         } else {
             if a_num > (self.max / 2) && bias > (self.max / 2)  {
-                            //limiting a_num to max - 1 to keep with coding convention of range start being inclusive but end being exclusive
+                //limiting a_num to max - 1 to keep with coding convention of range start being inclusive but end being exclusive
                 a_num = self.max - 1;
             } else {
                 a_num += bias;
