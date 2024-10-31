@@ -26,15 +26,17 @@ impl Distribution {
 
         let bias: u16 = rand::thread_rng().gen_range(0..self.skew.abs() as u16);
         if self.skew < 0 as i16 {
-            a_num -= bias;
-            if a_num < self.min {
+            if bias >= a_num { 
                 a_num = self.min;
+            } else {
+                a_num -= bias;
             }
         } else {
-            a_num += bias;
-            //limiting a_num to max - 1 to keep with coding convention of range start being inclusive but end being exclusive
-            if a_num >= self.max { 
+            if a_num > (self.max / 2) && bias > (self.max / 2)  {
+                            //limiting a_num to max - 1 to keep with coding convention of range start being inclusive but end being exclusive
                 a_num = self.max - 1;
+            } else {
+                a_num += bias;
             }
         }
         a_num

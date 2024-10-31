@@ -22,12 +22,17 @@ fn test_generate_map() {
     let mut a_map_processor: MapProcessor = Default::default();
 
     a_map_processor.generate_map();
+    
+    let mut generated = false;
     for row in a_map_processor.get_map().get_tiles() {
         for col in row {
             //based on temporary implementation of map generation
-            assert!(*col.get_height() < 256);
+            if *col.get_height() != 200 {
+                generated = true;
+            }
         }
     }
+    assert!(generated);
 }
 
 #[test]
@@ -85,12 +90,16 @@ fn test_process_map() {
     a_map_processor.process_map();
 
     //check that map generated
+    let mut generated = false;
     for row in a_map_processor.get_map().get_tiles() {
         for col in row {
             //based on temporary implementation of map generation
-            assert!(*col.get_height() < 256);
+            if *col.get_height() != 200 {
+                generated = true;
+            }
         }
     }
+    assert!(generated);
 
     //check that image data was extrapolated
     if let Some(ref image_data) = a_map_processor.get_image_data() {

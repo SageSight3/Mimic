@@ -22,9 +22,22 @@ pub struct MapGenerator {
 impl MapGenerator {
 
     pub fn generate_map(a_map: &mut Map) { //Design WIP
-        let instructions = MapGenerator { duration: 1 };
+        let instructions = MapGenerator { 
+            duration: 1      
+        };
+
+        //temp until better implementation/specification implementation
+        //impact generation
+        let frequency: Distribution = Distribution::new(150, 250, 75);
+        let depth_range: Distribution = Distribution::new(3, 168, -166);
+        let impact_generator_delegate: ImpactGeneratorDelegate = ImpactGeneratorDelegate::new(
+            &frequency, 
+            &depth_range
+        );
+
         for pass in 0..instructions.duration {
-            Self::placeholder_generator(a_map)
+            //MapGenerator::placeholder_generator(a_map);
+            impact_generator_delegate.run_pass(a_map);
         }
     }
 
@@ -36,11 +49,26 @@ impl MapGenerator {
         });
     }
 
-    pub fn impact_generator(a_map: &mut Map, frequency: &Distribution, depth_range: &Distribution) {
-
-    }
-
     pub fn water_map_generator(a_map: &mut Map, percent_volume: u8) {
 
+    }
+}
+
+pub struct ImpactGeneratorDelegate {
+    frequency: Distribution,
+    depth_range: Distribution,
+}
+
+impl ImpactGeneratorDelegate {
+    pub fn new(a_frequency: &Distribution, a_depth_range: &Distribution) -> ImpactGeneratorDelegate {
+        ImpactGeneratorDelegate {
+            frequency: a_frequency.clone(),
+            depth_range: a_depth_range.clone()
+        }
+    }
+
+    pub fn run_pass(&self, a_map: &mut Map) {
+        let num_of_impacts: u16 = self.frequency.rand();
+        ImpactGenerator::generate(a_map, num_of_impacts, &self.depth_range);
     }
 }

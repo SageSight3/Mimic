@@ -11,3 +11,5 @@ Set up overserver with GUI and map processor\
 Implemented basic image interepreter\
 Implemented basic image generator\
 Implemented transient crater algorithm\
+Implemented crater rim algorithm
+First functional version of impact generator, Note: has bugs

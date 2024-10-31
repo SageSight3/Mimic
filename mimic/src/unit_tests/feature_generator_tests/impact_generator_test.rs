@@ -437,7 +437,6 @@ fn test_dig_transient_crater() {
 fn test_build_crater_rim() {
     //running 100 trials to ensure confidence across a large number of possible crater variances
     for trial in 0..50 {
-        println!("trial: {}", trial);
         //setup
         let mut a_map: Map = Default::default();
         a_map.update_tiles(|a_tile: &mut Tile| {
@@ -483,7 +482,7 @@ fn test_build_crater_rim() {
         //upward slope to max_added_height from crater center
         let ax_dividend: f32 = (crater_depth as f32) * (vari.powi(2));
         let c: f32 = crater_depth as f32;
-        let mut max_height_dist: u16 = 65535;
+        let mut max_height_dist: u16 = trans_rad;
 
         for dist_from_center in (trans_rad + 1)..=rim_rad {
             let ax_divisor: f32 = 9.0 * (dist_from_center as f32).powi(2);

@@ -195,10 +195,15 @@ impl Crater {
                     a_tile.set_height(height as i32);
 
                     //add carved out volume to ejecta for post-crater-gen redstribution
-                    self.ejecta_volume += (old_height - height as u32);
+                    self.ejecta_volume += (old_height as u32 - height as u32);
                 }
             }
         }
+        /*
+        if self.crater_depth > 50 {
+            println!("ejecta_volume: {}", self.ejecta_volume);
+        }
+        */
     }
 
     pub fn build_crater_rim(&mut self, a_map: &mut Map) {
@@ -213,7 +218,6 @@ impl Crater {
     surface height over their own. Function in many senses, mimics build_transient_crater() Look into 
     refactoring in future, and stopping */
     fn build_rim_upward_slope(&mut self, a_map: &mut Map, max_added_height: f32) -> u16 {
-
         //while for building the rim's upward slope, max_added_height needs to be rounded to return
         //the most accurate distance that it occurs at, the downward slope needs it for it's formula, so
         //this function will just create a rounded copy locally
@@ -245,13 +249,12 @@ impl Crater {
 
                     //add carved out volume to ejecta for post-crater-gen redstribution
                     //unlike transient crater, new height will be bigger than old height
-                    self.ejecta_volume += (old_height - new_height as u32); 
+                    self.ejecta_volume += old_height - new_height as u32; 
                 }
             }
         }
-        //return garbage number if failed to find distance from crater center with a new height greater
-        //than rounded_max
-        65535
+        //if edge of transient crater is edge of upward slope, return transient radius as max_height_dist
+        self.transient_radius
     }
 
     //adds height to tiles sloping downwards from the distance of the maximum added height to the crater

@@ -32,15 +32,50 @@ impl ImageData {
     }
 
     pub fn interpret_height_map(&mut self) {
+
+        let mut min_height: i32 = 99999999;
+        let mut max_height: i32 = -999999999;
+
         for rowIndex in 0..self.map.get_tiles().len() {
             let row = &self.map.get_tiles()[rowIndex];
             for colIndex in 0..row.len() {
+                let a_height: i32 = *self.map.get_tile(rowIndex, colIndex).get_height();
+
+                if a_height < min_height { min_height = a_height; }
+                if a_height > max_height { max_height = a_height; }
+            }
+        }
+
+        let mut height_range: i32 = max_height - min_height;
+        let mut divided: u8 = 0;
+        while height_range > 256 {
+            height_range = height_range / 2;
+            divided += 1;
+        }
+        println!("height range: {}", height_range);
+
+        for rowIndex in 0..self.map.get_tiles().len() {
+            let row = &self.map.get_tiles()[rowIndex];
+            for colIndex in 0..row.len() {
+
+                let mut trimmed_height: i32 = *self.map.get_tile(rowIndex, colIndex).get_height() - min_height;
+                while trimmed_height > 256 {
+                    trimmed_height = trimmed_height / 2;
+                }
+
+                let height_color_value = trimmed_height as u8;
+                self.pixels[rowIndex][colIndex].r = height_color_value;
+                self.pixels[rowIndex][colIndex].g = height_color_value;
+                self.pixels[rowIndex][colIndex].b = height_color_value;
+
+                /*
                 //we mod 256 as, at least a temporary way, to convert height into a grayscale value
                 //subject to change, assumes height range of map is between 0 and 255 inclusively
                 let height_color_value = (self.map.get_tile(rowIndex, colIndex).get_height() % 256) as u8;
                 self.pixels[rowIndex][colIndex].r = height_color_value;
                 self.pixels[rowIndex][colIndex].g = height_color_value;
                 self.pixels[rowIndex][colIndex].b = height_color_value;
+                */
             }
         }
     }
