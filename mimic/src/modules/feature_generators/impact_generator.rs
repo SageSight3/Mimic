@@ -1,4 +1,5 @@
 use eframe::egui::debug_text::print;
+use rand::thread_rng;
 
 use crate::modules::feature_generators::utility::Distribution;
 use crate::modules::map::Map;
@@ -23,16 +24,22 @@ impl Default for ImpactGenerator {
 //Stretch goal: revise later to be able to make simple and complex craters and maybe crater basins
 
 impl ImpactGenerator {
-    //maybe move amount to throw rng to map generator -> would remove an extra arg pass to ImpactGenerator
-    fn generate(a_map: &mut Map, frequency: &Distribution, depth_range: &Distribution) {
-        //initialize ImpactGenerator
+    pub fn generate(a_map: &mut Map, num_of_impacts: u16, depth_range: &Distribution) {
+        let mut impact_generator: ImpactGenerator = Default::default();
 
-        //loop for number of impacts to generate
-            //generate an impact coord
-            //generate a crate_depth
-            //generate crater
-        
-        //impact_generator.place_undistributed_material(a_map)
+        //generate impacts
+        for impact in 0..num_of_impacts {
+            let impact_x: usize = thread_rng().gen_range(0..*a_map.get_width());
+            let impact_y: usize = thread_rng().gen_range(0..*a_map.get_length());
+
+            let an_impact_coord: Coordinate = Coordinate::new(impact_x, impact_y);
+
+            let a_crater_depth: u16 = depth_range.rand();
+
+            impact_generator.generate_crater(a_map, a_crater_depth, an_impact_coord);
+        }
+
+        impact_generator.place_undistributed_material(a_map);
     }
 
     //write tests for big, medium, and small craters, big = 167, small = 6, medium = 15
@@ -73,14 +80,20 @@ impl ImpactGenerator {
     for initial minimum viable delivery will just distribute material uniformly across map unless tile height was
     changed to be represented by a float, material redistribution may only have the intended effect if opting for 
     target number of total passes for full map generation to be 900 */
-    pub fn place_undsitributed_material(&mut self, a_map: &mut Map) {
-        //height_to_add = (undristributed_material/(a_map.get_length() * a_map.get_width())) as i32
-        //a_map.update_tiles(|a_tile: &mut Tile| { a_tile.add_height(height_to_add); });
+    pub fn place_undistributed_material(&mut self, a_map: &mut Map) {
+        let height_to_add: i32 = (self.undistributed_height as f32 / (*a_map.get_length() * *a_map.get_width()) as f32).round() as i32;
+        if height_to_add > 0 {
+            a_map.update_tiles(|a_tile: &mut Tile| { a_tile.add_height(height_to_add); });
+        }
     }
 
     pub fn get_undistributed_height(&self) -> &u32 {
         &self.undistributed_height
     } 
+    
+    pub fn set_undistributed_height(&mut self, height: u32) {
+        self.undistributed_height = height;
+    }
 
     pub fn crater_tiles_coords(a_map: &mut Map, rim_rad: u16, impact_coord: &Coordinate) -> Vec<Vec<Coordinate>> {
         let mut coords: Vec<Vec<Coordinate>> = Vec::new();

@@ -600,10 +600,53 @@ fn test_generate_crater() {
 
 #[test]
 fn test_place_undistributed_material() {
-    assert!(false);
+    let mut a_map: Map = Default::default();
+    a_map.update_tiles(|a_tile: &mut Tile| {
+        a_tile.set_height(200);
+    });
+
+    a_map.update_tiles(| a_tile: &mut Tile | {
+        assert_eq!(*a_tile.get_height(), 200);
+    });
+
+    let mut an_impact_generator: ImpactGenerator = Default::default();
+
+    an_impact_generator.set_undistributed_height(4000000);
+    an_impact_generator.place_undistributed_material(&mut a_map);
+
+    a_map.update_tiles(| a_tile: &mut Tile | {
+        assert_eq!(*a_tile.get_height(), 201);
+    });
 }
 
 #[test]
 fn test_generate() {
-    assert!(false);
+    let mut a_map: Map = Default::default();
+    a_map.update_tiles(|a_tile: &mut Tile| {
+        a_tile.set_height(200);
+    });
+
+    a_map.update_tiles(| a_tile: &mut Tile | {
+        assert_eq!(*a_tile.get_height(), 200);
+    });
+
+    let impacts_num: u16 = 600;
+    let depth_distro: Distribution = Distribution::new(1, 50, 33);
+
+    a_map.update_tiles(| a_tile: &mut Tile | {
+        assert_eq!(*a_tile.get_height(), 200);
+    });
+
+    ImpactGenerator::generate(&mut a_map, impacts_num, &depth_distro);
+    
+    let mut tile_height_changed: bool = false;
+    for row in a_map.get_tiles(){
+        for col in row {
+            if *col.get_height() != 200 {
+                tile_height_changed = true;
+            }
+        }
+    }
+
+    assert!(tile_height_changed);
 }
