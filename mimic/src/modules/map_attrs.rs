@@ -48,5 +48,5 @@ pub fn default_length() -> usize {
 //the 32-bit integer limit will be used as the default height of a tile
 //to signify if any still need a real height generated for them
 pub fn default_tile_height() -> i32 {  
-    2147483647
+    i32::MAX
 }

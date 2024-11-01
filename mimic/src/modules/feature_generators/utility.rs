@@ -22,23 +22,22 @@ impl Distribution {
     }
 
     pub fn rand(&self) -> u16 {
-        let mut a_num: u16 = rand::thread_rng().gen_range(self.min..self.max);
+        let mut a_num: i16 = rand::thread_rng().gen_range(self.min..self.max) as i16;
 
-        let bias: u16 = rand::thread_rng().gen_range(0..self.skew.abs() as u16);
+        let bias: i16 = rand::thread_rng().gen_range(0..self.skew.abs());
         if self.skew < 0 as i16 {
-            if bias >= a_num { 
-                a_num = self.min;
-            } else {
-                a_num -= bias;
+            a_num -= bias;
+            if a_num < self.min as i16 { 
+                a_num = self.min as i16;
             }
         } else {
-            if a_num > (self.max / 2) && bias > (self.max / 2)  {
+            a_num += bias;
+            if a_num >= self.max as i16 {
                 //limiting a_num to max - 1 to keep with coding convention of range start being inclusive but end being exclusive
-                a_num = self.max - 1;
-            } else {
-                a_num += bias;
+                a_num = self.max as i16 - 1;
             }
         }
+        let a_num: u16 = a_num as u16;
         a_num
     }
 

@@ -32,7 +32,15 @@ Optimization
 update_tiles function
 crater generation algorithm
 Results
-inconsisten research (crater depth)
+inconsistent research (crater depth)
+Scale and Organization (Unit test confusion with test_generate())
+    method called generate() in 
+        map_processor.rs
+        water_map_generator.rs
+        impact_generator.rs
+        map_generator.rs
+being overly concise with data types
+over engineering
 
 crates/libraries used so far:
 eframe

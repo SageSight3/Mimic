@@ -82,6 +82,7 @@ impl ImpactGenerator {
     target number of total passes for full map generation to be 900 */
     pub fn place_undistributed_material(&mut self, a_map: &mut Map) {
         let height_to_add: i32 = (self.undistributed_height as f32 / (*a_map.get_length() * *a_map.get_width()) as f32).round() as i32;
+
         if height_to_add > 0 {
             a_map.update_tiles(|a_tile: &mut Tile| { a_tile.add_height(height_to_add); });
         }
@@ -190,12 +191,25 @@ impl Crater {
 
             for coord in coords_at_dist {
                 let mut a_tile = a_map.get_mut_tile(*coord.get_Y(), *coord.get_X());
-                if *a_tile.get_height() as u16 > height {
-                    let old_height: u32 = a_tile.get_height().clone() as u32;
+                if *a_tile.get_height() > height as i32 {
+                    let old_height: u32 = *a_tile.get_height() as u32;
+                    if old_height as i32 == i32::MAX {
+                        println!("invalid tile height: {}", *a_tile.get_height());
+                    }
                     a_tile.set_height(height as i32);
 
                     //add carved out volume to ejecta for post-crater-gen redstribution
-                    self.ejecta_volume += (old_height as u32 - height as u32);
+                    if (u32::MAX - old_height - height as u32) <= self.ejecta_volume {
+                        println!("ejecta_volume limit reached");
+                        println!("ejecta_volume: {}", self.ejecta_volume);
+                        println!("new ejecta: {}", old_height - height as u32);
+                        println!("old_height: {}", old_height);
+                        println!("new height: {}", height);
+                        println!("height_diff: {}", height_diff);
+                        println!("impact_coord_height: {}", self.impact_coord_height);
+                    }
+                    self.ejecta_volume += (old_height - height as u32);
+                    
                 }
             }
         }

@@ -19,7 +19,7 @@ fn test_generate_map() {
     a_map.update_tiles(| a_tile: &mut Tile | {
         assert_eq!(*a_tile.get_height(), 200);
     });
-
+    
     MapGenerator::generate_map(&mut a_map);
 
     let mut generated: bool = false;

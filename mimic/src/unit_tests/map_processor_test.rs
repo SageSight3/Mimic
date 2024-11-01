@@ -1,3 +1,5 @@
+use eframe::glow::ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH;
+
 #[cfg(test)]
 use super::*;
 use crate::modules::map_attrs::MapAttrs;
@@ -20,6 +22,10 @@ fn test_new() {
 #[test]
 fn test_generate_map() {
     let mut a_map_processor: MapProcessor = Default::default();
+
+    a_map_processor.get_mut_map().update_tiles(| a_tile: &mut Tile | {
+        a_tile.set_height(200);
+    });
 
     a_map_processor.generate_map();
     
