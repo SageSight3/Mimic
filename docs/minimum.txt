@@ -1,0 +1,7 @@
+At least two generators
+    impact generator v1
+    naturalize generator v1
+Image Interepreter and generator DONE
+Generate a by default 2000 x 2000 tile map DONE
+Design generators to be able to take custom parameters DONE
+    needs parsing
