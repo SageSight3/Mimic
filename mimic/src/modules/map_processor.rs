@@ -26,7 +26,7 @@ impl Default for MapProcessor {
    fn default() -> Self {
         Self {
             map: Default::default(),
-            map_name: "placeholderWIthImpacts".to_string(),
+            map_name: "placeholderImpactsSine".to_string(),
             status: "Map generator ready!".to_string(),
             map_image_data: None,
             map_image_path: "".to_string()
@@ -47,10 +47,24 @@ impl MapProcessor {
         //parse_specification(a_map_specification);
 
         //set map to a base height, may be moved later/may be defined by map specification
-        let a_height: i32 = 200;
+        /*
+        let base_height: i32 = 200;
         self.map.update_tiles(|a_tile: &mut Tile| {
-            a_tile.set_height(a_height);
+            a_tile.set_height(base_height);
         });
+        */
+
+        //wave version for temporary variation in terrain
+        let mut count: f32 = 0.0;
+        for row in self.map.get_mut_tiles() {
+            for tile in row {
+                let reference_line: i32 = 200;
+                let x = (30.0 * (count/166.0).sin()).round() as i32;
+                tile.set_height(reference_line + x);
+                count += 1.0;
+                if count == 2000.0 { count = 0.0; }
+            }
+        }
 
         self.generate_map();
         self.extrapolate_image_data();

@@ -532,9 +532,10 @@ fn test_build_crater_rim() {
             //make sure rim_tiles added the row successfully
             assert_eq!(rim_tiles[index - (trans_rad as usize + 1)].len(), a_crater.get_tiles_coords()[index].len());
         }
+
         //make sure rim_tiles added the all target rows, + 1 to rim_rad - (trans_rad + 1) due to len being one bigger than range of
         //rim_tiles' slice of a_crater.tiles_coords
-        assert_eq!(rim_tiles.len(), (rim_rad-(trans_rad + 1) + 1) as usize);
+        assert_eq!(rim_tiles.len(), (1 + rim_rad-(trans_rad + 1)) as usize);
 
         let mut old_tile_heights: Vec<Vec<i32>> = Vec::new();
         for (index,row) in rim_tiles.iter().enumerate() {
