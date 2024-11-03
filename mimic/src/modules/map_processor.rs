@@ -8,6 +8,8 @@ use crate::modules::image_generator::ImageGenerator;
 use crate::modules::tile::Tile; //may be temporary
 use std::io;
 
+use rand::Rng;
+
 #[derive(Debug, Clone)]
 pub struct MapProcessor {
     map: Map,
@@ -26,7 +28,7 @@ impl Default for MapProcessor {
    fn default() -> Self {
         Self {
             map: Default::default(),
-            map_name: "placeholderImpactsSine".to_string(),
+            map_name: "SineExperiment".to_string(),
             status: "Map generator ready!".to_string(),
             map_image_data: None,
             map_image_path: "".to_string()
@@ -55,16 +57,45 @@ impl MapProcessor {
         */
 
         //wave version for temporary variation in terrain
-        let mut count: f32 = 0.0;
+        let reference_line: i32 = 200;
+        let mut x_count: f32 = 0.0;
+        let x_period: f32 = rand::thread_rng().gen_range(70.0..=130.0);
+        let x_amp: f32 = rand::thread_rng().gen_range(15.0..=45.0);
+        let mut x: i32;
+        let mut y_count: f32 = 0.0;
+        let y_period: f32 = rand::thread_rng().gen_range(70.0..=130.0);
+        let y_amp: f32 = rand::thread_rng().gen_range(15.0..=45.0);
+        let mut y: i32;
+        
         for row in self.map.get_mut_tiles() {
+            y = (30.0 * (y_count/100.0).sin()).round() as i32;
+            let yx: i32 = (30.0 * ((x_count*y_count)/100.0).sin()).round() as i32;
+            for tile in row {
+                x = (30.0 * (x_count/100.0).sin()).round() as i32;
+                x_count += 1.0;
+                if x_count == 2000.0 { x_count = 0.0; }
+
+                let xy: i32 = ((13.0 * ((x_count*y_count)/100.0).sin()) * ((14.0 * ((x_count*y_count)/43600.0).sin()))).round() as i32;
+                tile.set_height(reference_line + xy);
+            }
+            y_count += 1.0;
+            if y_count == 2000.0 { y_count = 0.0; }
+        }
+
+        /*
+        for row in self.map.get_mut_tiles() {
+            let y: i32 = ((46.0 * (y_count/100.0).sin()) + (17.0 * (x_count/234.0).sin())).round() as i32;
             for tile in row {
                 let reference_line: i32 = 200;
-                let x = (30.0 * (count/166.0).sin()).round() as i32;
-                tile.set_height(reference_line + x);
-                count += 1.0;
-                if count == 2000.0 { count = 0.0; }
+                let x = ((46.0 * (y_count/100.0).sin()) + (17.0 * (x_count/234.0).sin())).round() as i32;
+                tile.set_height(reference_line + x + y);
+                x_count += 1.0;
+                if x_count == 2000.0 { x_count = 0.0; }
             }
+            y_count += 1.0;
+            if y_count == 2000.0 { y_count = 0.0; }
         }
+        */
 
         self.generate_map();
         self.extrapolate_image_data();
