@@ -25,7 +25,7 @@ impl ImageData {
         }
     }
 
-    pub fn interpret_map_data(a_map: &mut Map)  -> Option<ImageData> {
+    pub fn interpret_map_data(a_map: &mut Map) -> Option<ImageData> {
         let mut image_data = ImageData::new(a_map);
         image_data.interpret_height_map();
         Some(image_data)
@@ -47,11 +47,6 @@ impl ImageData {
         }
 
         let mut height_range: i32 = max_height - min_height;
-        let mut divided: u8 = 0;
-        while height_range > 256 {
-            height_range = height_range / 2;
-            divided += 1;
-        }
         println!("height range: {}", height_range);
 
         for rowIndex in 0..self.map.get_tiles().len() {
@@ -59,11 +54,9 @@ impl ImageData {
             for colIndex in 0..row.len() {
 
                 let mut trimmed_height: i32 = (*self.map.get_tile(rowIndex, colIndex).get_height()).abs() - min_height;
-                while trimmed_height > 256 {
-                    trimmed_height = trimmed_height / 2;
-                }
 
-                let height_color_value = trimmed_height as u8;
+                let height_color_value: u8 = (200.0 * (trimmed_height as f32/height_range as f32)) as u8;
+
                 self.pixels[rowIndex][colIndex].r = height_color_value;
                 self.pixels[rowIndex][colIndex].g = height_color_value;
                 self.pixels[rowIndex][colIndex].b = height_color_value;

@@ -57,7 +57,7 @@ impl MapProcessor {
         */
 
         //wave version for temporary variation in terrain
-        let reference_line: i32 = 200;
+        let base_height: f32 = 200.0;
         let mut x_count: f32 = 0.0;
         let x_period: f32 = rand::thread_rng().gen_range(70.0..=130.0);
         let x_amp: f32 = rand::thread_rng().gen_range(15.0..=45.0);
@@ -75,8 +75,9 @@ impl MapProcessor {
                 x_count += 1.0;
                 if x_count == 2000.0 { x_count = 0.0; }
 
-                let xy: i32 = ((13.0 * ((x_count*y_count)/100.0).sin()) * ((14.0 * ((x_count*y_count)/43600.0).sin()))).round() as i32;
-                tile.set_height(reference_line + xy);
+                let mut xy: f32 = ((0.3 * ((((x_count-1333.0).powi(2) + (y_count-1046.0).powi(2)).sqrt())/100.0).sin()) /*+ (17.0 * ((((x_count-2000.0).powi(2) + (y_count).powi(2)).sqrt())/24.0).sin())*/);
+
+                tile.set_height( ((1.0 + xy) * base_height).round() as i32);
             }
             y_count += 1.0;
             if y_count == 2000.0 { y_count = 0.0; }
@@ -103,6 +104,18 @@ impl MapProcessor {
         unsafe {
             Self::mark_gui_dirty("Map generated!".to_string());
         }   
+    }
+
+    pub fn setup(&mut self)  {
+        let base_height: f32 = 200.0;
+        let complexity: u8 = rand::thread_rng().gen_range(12..=100);
+
+        for wave in 0..complexity {
+            let period: f32  = rand::thread_rng().gen_range(1.0..=2000.0);
+            let amp: f32 = rand::thread_rng().gen_range(0.01..=0.05);
+            let x_transform: f32 = rand::thread_rng().gen_range(-1999.0..=1999.0);
+            let y_transform: f32 = rand::thread_rng().gen_range(-1999.0..=1999.0);    
+        }
     }
 
     pub fn generate_map(&mut self) {
