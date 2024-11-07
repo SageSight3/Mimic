@@ -7,3 +7,4 @@ pub mod map_processor;
 pub mod image_interpreter;
 pub mod image_generator;
 pub mod feature_generators;
+pub mod setup;
