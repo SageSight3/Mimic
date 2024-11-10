@@ -190,3 +190,50 @@ fn test_water_volume() {
     a_map.set_water_volume(&new_volume);
     assert_eq!(*a_map.get_water_volume(), new_volume);
 }
+
+#[test]
+fn test_compute_height_data() {
+    let mut a_map: Map = Default::default();
+
+    assert_eq!(*a_map.get_height_range(), 0);
+    assert_eq!(*a_map.get_min_height(), *a_map.get_attrs().get_base_tile_height());
+    assert_eq!(*a_map.get_max_height(), *a_map.get_attrs().get_base_tile_height());
+
+    let a_height = 200;
+    a_map.update_tiles(|a_tile: &mut Tile| { a_tile.set_height(a_height); });
+    let another_height = -9;
+    a_map.get_mut_tile(500, 400).set_height(another_height);
+
+    a_map.compute_height_data();
+
+    assert_eq!(*a_map.get_height_range(), a_height - another_height);
+    assert_eq!(*a_map.get_min_height(), another_height);
+    assert_eq!(*a_map.get_max_height(), a_height);
+}
+
+#[test]
+fn test_update_tiles_positionally() {
+    let height = 200;
+    let mut a_map_attrs: MapAttrs = MapAttrs::new(map_attrs::default_length(), map_attrs::default_width(), height);
+    let mut a_map: Map = Map::new(&mut a_map_attrs);
+
+    //control test
+    for row in a_map.get_tiles(){
+        for col in row {
+            assert_eq!(*col.get_height(), height);
+        }
+    }
+
+    //test with passing update_tiles() a closure
+    let pos_height = |coord: &Coordinate, a_tile: &mut Tile| {
+        a_tile.set_height((coord.get_X() + coord.get_Y()) as i32)
+    };
+
+    a_map.update_tiles_positionally(pos_height);
+
+    for (y_coord, row) in a_map.get_tiles().iter().enumerate(){
+        for (x_coord, tile) in row.iter().enumerate() {
+            assert_eq!(*tile.get_height(), (x_coord + y_coord) as i32);
+        }
+    }
+}

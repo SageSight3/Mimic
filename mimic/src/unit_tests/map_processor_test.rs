@@ -55,6 +55,21 @@ fn test_extrapolate_image_data() {
     a_map_processor.extrapolate_image_data();
 
     if let Some(ref image_data) = a_map_processor.get_image_data() {
+        for row in image_data.get_pixels() {
+            for pixel in row {
+                assert_eq!(*pixel.get_b(), 0);
+            }
+        }
+    } else {
+        //if map_image_data was none
+        let _fail_test = false;
+        assert!(_fail_test);
+    }
+
+    MapGenerator::placeholder_generator(a_map_processor.get_mut_map());
+    a_map_processor.extrapolate_image_data();
+
+    if let Some(ref image_data) = a_map_processor.get_image_data() {
         let mut found_high_pixel_value: bool = false;
 
         for row in image_data.get_pixels() {

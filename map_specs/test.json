@@ -3,6 +3,9 @@
     "length": "2000",
     "width": "2000",
     "base_height": "200",
+    "setup" : {
+        "noise_complexity": "DEFAULT"
+    },
     "eons": [
         {
             "name": "LHB",
@@ -47,7 +50,7 @@
                 {
                     "type": "WATER",
                     "specification": {
-                        "percent_volume": "70"
+                        "surface_coverage": "70"
                     }
                 }
             ]

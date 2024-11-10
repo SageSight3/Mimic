@@ -12,10 +12,10 @@ impl ImageData {
 
     //Interpretation process subject to change
     pub fn new(a_map: &mut Map) -> ImageData {
-        let wid = a_map.get_attrs().get_width().to_owned();
-        let len = a_map.get_attrs().get_length().to_owned();
+        let wid: usize = a_map.get_attrs().get_width().to_owned();
+        let len: usize = a_map.get_attrs().get_length().to_owned();
 
-        let pixel_vector = vec![vec![Pixel::new(0, 0, 0); wid]; len];
+        let pixel_vector: Vec<Vec<Pixel>> = vec![vec![Default::default(); wid]; len];
 
         ImageData {
             pixels: pixel_vector,
@@ -33,43 +33,21 @@ impl ImageData {
 
     pub fn interpret_height_map(&mut self) {
 
-        let mut min_height: i32 = 99999999;
-        let mut max_height: i32 = -999999999;
+        println!("height range: {}", *self.map.get_height_range());
 
-        for rowIndex in 0..self.map.get_tiles().len() {
-            let row = &self.map.get_tiles()[rowIndex];
-            for colIndex in 0..row.len() {
-                let a_height: i32 = (*self.map.get_tile(rowIndex, colIndex).get_height()).abs();
-
-                if a_height < min_height { min_height = a_height; }
-                if a_height > max_height { max_height = a_height; }
-            }
-        }
-
-        let mut height_range: i32 = max_height - min_height;
-        println!("height range: {}", height_range);
-
+        let max_color_val: i32 = 200; //pixel at coords of max height should be 200, min should b 0
         for rowIndex in 0..self.map.get_tiles().len() {
             let row = &self.map.get_tiles()[rowIndex];
             for colIndex in 0..row.len() {
 
-                //look into desiredHeight = (max_height - min_height)/DesiredRanged * height + min_height 
-                let mut trimmed_height: i32 = (*self.map.get_tile(rowIndex, colIndex).get_height()).abs() - min_height;
-
-                let height_color_value: u8 = (200.0 * (trimmed_height as f32/height_range as f32)) as u8;
+                //we don't have to worry about negative tile heights, because if the case, min_height will also be negative, meaning
+                //the loweest trimmed_height could ever be is 0
+                let mut trimmed_height: i32 = (*self.map.get_tile(rowIndex, colIndex).get_height()) - self.map.get_min_height();
+                let height_color_value: u8 = (max_color_val as f32 * (trimmed_height as f32/(*self.map.get_height_range() as f32))) as u8;
 
                 self.pixels[rowIndex][colIndex].r = height_color_value;
                 self.pixels[rowIndex][colIndex].g = height_color_value;
                 self.pixels[rowIndex][colIndex].b = height_color_value;
-
-                /*
-                //we mod 256 as, at least a temporary way, to convert height into a grayscale value
-                //subject to change, assumes height range of map is between 0 and 255 inclusively
-                let height_color_value = (self.map.get_tile(rowIndex, colIndex).get_height() % 256) as u8;
-                self.pixels[rowIndex][colIndex].r = height_color_value;
-                self.pixels[rowIndex][colIndex].g = height_color_value;
-                self.pixels[rowIndex][colIndex].b = height_color_value;
-                */
             }
         }
     }
@@ -100,7 +78,17 @@ impl ImageData {
 pub struct Pixel {
     r: u8,
     g: u8,
-    b: u8
+    b: u8,
+}
+
+impl Default for Pixel {
+    fn default() -> Self {
+        Self {
+            r: 0,
+            g: 0,
+            b: 0,
+        }
+    }
 }
 
 impl Pixel {
@@ -108,7 +96,7 @@ impl Pixel {
         Pixel {
             r: red,
             g: green,
-            b: blue
+            b: blue,
         }
     }
 

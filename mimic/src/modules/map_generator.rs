@@ -47,6 +47,7 @@ impl MapGenerator {
             let a_height: i32 = rand::thread_rng().gen_range(1..256);
             a_tile.set_height(a_height);
         });
+        a_map.compute_height_data();
     }
 
     pub fn water_map_generator(a_map: &mut Map, percent_volume: u8) {
@@ -70,5 +71,6 @@ impl ImpactGeneratorDelegate {
     pub fn run_pass(&self, a_map: &mut Map) {
         let num_of_impacts: u16 = self.frequency.rand();
         ImpactGenerator::generate(a_map, num_of_impacts, &self.depth_range);
+        a_map.compute_height_data(); //recalculate a_map's height data after impacts
     }
 }

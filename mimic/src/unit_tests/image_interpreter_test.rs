@@ -20,6 +20,15 @@ fn test_pixel_new() {
 }
 
 #[test]
+fn test_pixel_default() {
+    let a_pixel: Pixel = Default::default();
+
+    assert_eq!(*a_pixel.get_r(), 0);
+    assert_eq!(*a_pixel.get_g(), 0);
+    assert_eq!(*a_pixel.get_b(), 0);
+}
+
+#[test]
 fn test_new() {
     let mut a_map: Map = Default::default();
     let map_image_data = ImageData::new(&mut a_map);

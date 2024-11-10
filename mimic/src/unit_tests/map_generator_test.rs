@@ -45,6 +45,8 @@ fn test_placeholder_generator() {
             assert!(*col.get_height() < 256);
         }
     }
+
+    assert!(*a_map.get_height_range() > 0);
 }
 
 //Still need to update generate_map() test
@@ -79,6 +81,7 @@ fn test_impact_generator_delegate() {
         }
     }
     assert!(generated);
+    assert!(*a_map.get_height_range() > 0);
 }
 
 //Still need to update generate_map() test

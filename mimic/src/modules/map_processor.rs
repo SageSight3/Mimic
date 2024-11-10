@@ -28,7 +28,7 @@ impl Default for MapProcessor {
    fn default() -> Self {
         Self {
             map: Default::default(),
-            map_name: "SineExperiment".to_string(),
+            map_name: "NoiseTest".to_string(),
             status: "Map generator ready!".to_string(),
             map_image_data: None,
             map_image_path: "".to_string()
@@ -55,6 +55,10 @@ impl MapProcessor {
             a_tile.set_height(base_height);
         });
         */
+
+        //noise generation
+        //25 an 100 chosen arbitrarily
+        let num_of_waves: u8 = rand::thread_rng().gen_range(25..=100);
 
         //wave version for temporary variation in terrain
         let base_height: f32 = 200.0;
