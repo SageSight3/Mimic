@@ -53,6 +53,7 @@ impl ImageData {
             let row = &self.map.get_tiles()[rowIndex];
             for colIndex in 0..row.len() {
 
+                //look into desiredHeight = (max_height - min_height)/DesiredRanged * height + min_height 
                 let mut trimmed_height: i32 = (*self.map.get_tile(rowIndex, colIndex).get_height()).abs() - min_height;
 
                 let height_color_value: u8 = (200.0 * (trimmed_height as f32/height_range as f32)) as u8;

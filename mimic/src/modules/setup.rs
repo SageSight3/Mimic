@@ -29,7 +29,13 @@ pub fn make_sine_wave() -> Box<dyn Fn(&Coordinate) -> f32> {
     let period: f32 = rand::thread_rng().gen_range(70.0..=130.0);
     let amp: f32 = rand::thread_rng().gen_range(15.0..=45.0);
 
+    //set everythng to be based off a random amp instead, no translation, no period
+        //to go from 1d to 2d, have two different frequencies: instead of using the
+        //x and y of a coordinate as the x in sin x, they wlll be used to deermine the 
+        //frequencies of sinx amp*sin(x*period*frequency) frequecy = f(x and y)?
+
     //range chosen arbitrarilt, for now
+    //change to map length/width to map length/width/2
     let x_translate: f32 = rand::thread_rng().gen_range(-1999.0..=1000.0);
     let y_translate: f32 = rand::thread_rng().gen_range(-1999.0..=1000.0);
 
