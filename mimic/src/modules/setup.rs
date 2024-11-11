@@ -34,14 +34,14 @@ pub fn noisify_height(a_map: &mut Map, base_height: i32) {
 //returns a noise function built from a number of sine waves, called complexity, each wave being built based map attributes
 pub fn make_noise_func(complexity: u16) -> impl Fn(&Coordinate) -> f32 {
 
-    //set first wave to 0, to pass as base arg to combine
+    //set first wave to 0, to pass as base  arg to combine
     let mut current_noise_func = make_sine_wave(0.0, 1.0, 0.0, 0.0);
     
     for wave in 0..complexity {
 
         //division slower than multiplication, so will divide before putting into a new SineWave closure
-        let period: f32 = 1.0 / rand::thread_rng().gen_range(70.0..=130.0);
-        let amp: f32 = rand::thread_rng().gen_range(15.0..=45.0);
+        let period: f32 = 1.0 / rand::thread_rng().gen_range(15.0..=130.0);
+        let amp: f32 = rand::thread_rng().gen_range(3.0..=11.0);
 
         //range chosen arbitrarilt, for now
         //change to map length/width to map length/width/2

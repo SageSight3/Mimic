@@ -29,7 +29,7 @@ impl Default for MapProcessor {
    fn default() -> Self {
         Self {
             map: Default::default(),
-            map_name: "Mimic_1.0.0".to_string(),
+            map_name: "Tweaks".to_string(),
             status: "Map generator ready!".to_string(),
             map_image_data: None,
             map_image_path: "".to_string()
@@ -47,6 +47,9 @@ impl MapProcessor {
     }
 
     pub fn process_map(&mut self) {
+
+        println!("\n***Mimic Procedural Map Generator***\n");
+        
         //parse_specification(a_map_specification);
 
         //set map to a base height, may be moved later/may be defined by map specification
@@ -113,6 +116,8 @@ impl MapProcessor {
 
         println!("Map generated!\n");
         println!("height range: {}", *self.map.get_height_range());
+        println!("lowest height: {}", *self.map.get_min_height());
+        println!("highest height: {}", *self.map.get_max_height());
         println!("sea level: {}", *self.map.get_sea_level());
         println!("water surface area: {}%", *self.map.get_water_percent_surface_area() * 100.0);
 
