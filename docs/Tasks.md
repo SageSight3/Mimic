@@ -16,6 +16,7 @@
 * Implement basic eons
 * refactor impact generator implementation an unit tests so that Crater::new() only needs crater depth and map to make a crater
     * will need to move crater_tile_coords()
+* adjust setup's noise bounds/refactor to bring map height_range down to range closer to a desired range (maybe 100 - 300?)
 
 ### Low Priority
 
