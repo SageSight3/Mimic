@@ -3,9 +3,30 @@
     "length": "2000",
     "width": "2000",
     "base_height": "200",
-    "setup" : {
-        "noise_complexity": "DEFAULT"
-    },
+    "setup" : [
+        {
+            "type": "BASE_HEIGHT",
+            "specification": {
+                "base_height": "200"
+            }
+        },
+        {
+            "type": "HEIGHT_NOISE",
+            "specification": {
+                "complexity": "100",
+                "amp_range": {
+                    "min": "15",
+                    "max": "45",
+                    "skew": "NONE"
+                },
+                "period_range": {
+                    "min": "70",
+                    "max": "130",
+                    "skew": "NONE"
+                }
+            }
+        }
+    ],
     "eons": [
         {
             "name": "LHB",

@@ -7,3 +7,4 @@ mod app_test;
 mod image_interpreter_test;
 mod image_generator_test;
 mod feature_generator_tests;
+mod setup_test;

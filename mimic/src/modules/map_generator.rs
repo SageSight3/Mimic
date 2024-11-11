@@ -35,9 +35,18 @@ impl MapGenerator {
             &depth_range
         );
 
+        let water_map_delegate: WaterMapDelegate = WaterMapDelegate::new();
+
+        //water map generation
+
         for pass in 0..instructions.duration {
+
+            //run generators that alter height map first
             //MapGenerator::placeholder_generator(a_map);
             impact_generator_delegate.run_pass(a_map);
+
+            //non height map generators
+            water_map_delegate.run_pass(a_map);
         }
     }
 
@@ -48,10 +57,6 @@ impl MapGenerator {
             a_tile.set_height(a_height);
         });
         a_map.compute_height_data();
-    }
-
-    pub fn water_map_generator(a_map: &mut Map, percent_volume: u8) {
-
     }
 }
 
@@ -72,5 +77,21 @@ impl ImpactGeneratorDelegate {
         let num_of_impacts: u16 = self.frequency.rand();
         ImpactGenerator::generate(a_map, num_of_impacts, &self.depth_range);
         a_map.compute_height_data(); //recalculate a_map's height data after impacts
+    }
+}
+
+pub struct WaterMapDelegate {
+
+}
+
+impl WaterMapDelegate {
+    pub fn new() -> WaterMapDelegate {
+        WaterMapDelegate {
+
+        }
+    }
+
+    pub fn run_pass(&self, a_map: &mut Map) {
+        WaterMapGenerator::generate(a_map);
     }
 }

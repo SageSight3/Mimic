@@ -1,8 +1,35 @@
 use crate::modules::map::Coordinate;
+use crate::modules::map::Map;
+use crate::modules::tile::Tile;
 use rand::Rng;
 
-type SineWave = Box<dyn Fn(&Coordinate) -> f32>; //since wave closure
+pub type SineWave = Box<dyn Fn(&Coordinate) -> f32>; //since wave closure
 
+pub fn set_up_map(a_map: &mut Map, base_height: i32) {
+    noisify_height(a_map, base_height);
+}
+
+pub fn noisify_height(a_map: &mut Map, base_height: i32) {
+    let noise_func = make_noise_func(30);
+
+    let height_set = |coord: &Coordinate, tile: &mut Tile| {
+        let noise: f32 = noise_func(coord).round();
+        tile.set_height(base_height + noise as i32);
+    };
+
+    a_map.update_tiles_positionally(height_set);
+    a_map.compute_height_data();
+
+    //if min height drops below 0, increase map height, so min height is 0
+    //do this to prevent overflow errors in genreators only expecting positive heights
+    let min_height: i32 = *a_map.get_min_height();
+    if min_height < 0 {
+        a_map.update_tiles(|tile: &mut Tile| {
+            tile.add_height(min_height.abs());
+        });
+        a_map.compute_height_data();
+    }
+}
 
 //returns a noise function built from a number of sine waves, called complexity, each wave being built based map attributes
 pub fn make_noise_func(complexity: u16) -> impl Fn(&Coordinate) -> f32 {
@@ -28,8 +55,7 @@ pub fn make_noise_func(complexity: u16) -> impl Fn(&Coordinate) -> f32 {
     current_noise_func
 }
 
-pub fn combine(a: Box<dyn Fn(&Coordinate) -> f32>, b: Box<dyn Fn(&Coordinate) -> f32>) -> SineWave
-{
+pub fn combine(a: Box<dyn Fn(&Coordinate) -> f32>, b: Box<dyn Fn(&Coordinate) -> f32>) -> SineWave {
     Box::new(
         move | a_coord: &Coordinate | {
             a(a_coord) + b(a_coord)

@@ -175,20 +175,12 @@ fn inc_tiles_height(a_tile: &mut Tile) {
 }
 
 #[test]
-fn test_water_volume() {
+fn test_water_surface_area() {
     let mut a_map: Map = Default::default();
-    
-    assert_eq!(*a_map.get_water_volume(), 0);
+    assert_eq!(*a_map.get_water_percent_surface_area(), 0.5);
 
-    //mutable getter test
-    let mut new_volume: u64 = 3;
-    *a_map.get_mut_water_volume() = new_volume;
-    assert_eq!(*a_map.get_water_volume(), new_volume);
-
-    //setter test
-    new_volume = 53;
-    a_map.set_water_volume(&new_volume);
-    assert_eq!(*a_map.get_water_volume(), new_volume);
+    let expected_result: u32 = (0.5 * (*a_map.get_length() * *a_map.get_width()) as f32) as u32;
+    assert_eq!(*a_map.get_estimated_water_surface_area(), expected_result);
 }
 
 #[test]

@@ -6,6 +6,7 @@ use crate::modules::map_generator::MapGenerator;
 use crate::modules::image_interpreter::ImageData;
 use crate::modules::image_generator::ImageGenerator;
 use crate::modules::tile::Tile; //may be temporary
+use crate::modules::setup;
 use std::io;
 
 use rand::Rng;
@@ -28,7 +29,7 @@ impl Default for MapProcessor {
    fn default() -> Self {
         Self {
             map: Default::default(),
-            map_name: "NoiseTest".to_string(),
+            map_name: "WaterTest".to_string(),
             status: "Map generator ready!".to_string(),
             map_image_data: None,
             map_image_path: "".to_string()
@@ -57,6 +58,9 @@ impl MapProcessor {
         */
 
         //noise generation
+        let base_height: i32 = 200;
+        self.setup(base_height);
+        /*
         //25 an 100 chosen arbitrarily
         let num_of_waves: u8 = rand::thread_rng().gen_range(25..=100);
 
@@ -86,6 +90,7 @@ impl MapProcessor {
             y_count += 1.0;
             if y_count == 2000.0 { y_count = 0.0; }
         }
+        */
 
         /*
         for row in self.map.get_mut_tiles() {
@@ -105,21 +110,21 @@ impl MapProcessor {
         self.generate_map();
         self.extrapolate_image_data();
         self.generate_image();
+
+        println!("height range: {}", *self.map.get_height_range());
+        println!("sea level: {}", *self.map.get_sea_level());
+        println!("water surface area: {}%", *self.map.get_water_percent_surface_area() * 100.0);
+
         unsafe {
             Self::mark_gui_dirty("Map generated!".to_string());
         }   
     }
 
-    pub fn setup(&mut self)  {
-        let base_height: f32 = 200.0;
-        let complexity: u8 = rand::thread_rng().gen_range(12..=100);
-
-        for wave in 0..complexity {
-            let period: f32  = rand::thread_rng().gen_range(1.0..=2000.0);
-            let amp: f32 = rand::thread_rng().gen_range(0.01..=0.05);
-            let x_transform: f32 = rand::thread_rng().gen_range(-1999.0..=1999.0);
-            let y_transform: f32 = rand::thread_rng().gen_range(-1999.0..=1999.0);    
+    pub fn setup(&mut self, base_height: i32)  {
+        unsafe {
+            Self::mark_gui_dirty("Preparing Map...".to_string());
         }
+        setup::set_up_map(&mut self.map, base_height);
     }
 
     pub fn generate_map(&mut self) {

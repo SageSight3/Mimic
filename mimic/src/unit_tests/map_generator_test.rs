@@ -6,7 +6,10 @@ use crate::modules::tile::Tile;
 use crate::modules::map_generator::MapGenerator;
 use crate::modules::feature_generators::utility::Distribution;
 use crate::modules::feature_generators::impact_generator::ImpactGenerator;
+use crate::modules::feature_generators::water_map_generator::WaterMapGenerator;
+use crate::modules::setup;
 use crate::modules::map_generator::ImpactGeneratorDelegate;
+use crate::modules::map_generator::WaterMapDelegate;
 
 #[test]
 fn test_generate_map() {
@@ -22,6 +25,7 @@ fn test_generate_map() {
     
     MapGenerator::generate_map(&mut a_map);
 
+    //test height map generation
     let mut generated: bool = false;
     for row in a_map.get_tiles() {
         for col in row {
@@ -32,6 +36,18 @@ fn test_generate_map() {
         }
     }
     assert!(generated);
+
+    //test water map genereration
+    assert!(*a_map.get_sea_level() != i32::MAX);
+    let mut found_water: bool = true;
+    for row in a_map.get_tiles() {
+        for tile in row {
+            if *tile.has_water() {
+                found_water = true;
+            }
+        }
+    }
+    assert!(found_water);
 }
 
 #[test]
@@ -87,5 +103,23 @@ fn test_impact_generator_delegate() {
 //Still need to update generate_map() test
 #[test]
 fn test_water_map_generator() {
-    assert!(false);
+    let mut a_map: Map = Default::default();
+    let base_height: i32 = 200;
+    setup::set_up_map(&mut a_map, base_height);
+
+    let a_water_map_delegate: WaterMapDelegate = WaterMapDelegate::new();
+    a_water_map_delegate.run_pass(&mut a_map);
+
+    assert!(*a_map.get_sea_level() != i32::MAX);
+    
+    let mut found_water: bool = true;
+    for row in a_map.get_tiles() {
+        for tile in row {
+            if *tile.has_water() {
+                found_water = true;
+            }
+        }
+    }
+
+    assert!(found_water);
 }

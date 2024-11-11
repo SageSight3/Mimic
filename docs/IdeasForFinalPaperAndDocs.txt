@@ -41,6 +41,7 @@ Scale and Organization (Unit test confusion with test_generate())
         map_generator.rs
 being overly concise with data types
 over engineering
+map() vs for in/for_each()
 
 crates/libraries used so far:
 eframe

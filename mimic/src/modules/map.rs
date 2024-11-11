@@ -10,7 +10,9 @@ pub struct Map {
     attrs: MapAttrs,
 
     //water_data
-    water_volume: u64,
+    water_percent_surface_area: f32, //percent of surface under water
+    estimated_water_surface_area: u32, //esitimated number of tiles that should be under water
+    sea_level: i32,
 
     //height data
     height_range: i32,
@@ -36,13 +38,16 @@ impl Map {
         let mut a_map = Map {
             tiles: map_tiles,
             attrs: map_attributes.to_owned(),
-            water_volume: 0,
+            water_percent_surface_area: 0.5,
+            estimated_water_surface_area: 0,
+            sea_level: i32::MAX,
             height_range: 0,
             min_height: 0,
             max_height: 0
         };
 
         a_map.compute_height_data();
+        a_map.estimate_water_sureface_area();
 
         a_map
     }
@@ -91,6 +96,12 @@ impl Map {
         self.height_range = (max - min) as i32;
     }
 
+    pub fn estimate_water_sureface_area(&mut self) {
+        let total_tiles: u32 = (*self.attrs.get_length() * *self.attrs.get_width()) as u32;
+
+        self.estimated_water_surface_area = (self.water_percent_surface_area * total_tiles as f32).round() as u32;
+    }
+
     //getters and setters
     pub fn get_tiles(&self) -> &Vec<Vec<Tile>> {
         &self.tiles
@@ -112,16 +123,12 @@ impl Map {
         &mut self.tiles[col][row]
     }
 
-    pub fn get_water_volume(&self) -> &u64 {
-        &self.water_volume
+    pub fn get_water_percent_surface_area(&self) -> &f32 {
+        &self.water_percent_surface_area
     }
 
-    pub fn get_mut_water_volume(&mut self) -> &mut u64 {
-        &mut self.water_volume
-    }
-
-    pub fn set_water_volume(&mut self, a_volume: &u64) {
-        self.water_volume = a_volume.clone();
+    pub fn get_estimated_water_surface_area(&self) -> &u32 {
+        &self.estimated_water_surface_area
     }
 
     //this will be used when needing to completely change a tile, rather than any time any
@@ -152,6 +159,14 @@ impl Map {
 
     pub fn get_max_height(&self) -> &i32 {
         &self.max_height
+    }
+
+    pub fn get_sea_level(&self) -> &i32 {
+        &self.sea_level
+    }
+
+    pub fn set_sea_level(&mut self, a_height: i32) {
+        self.sea_level = a_height;
     }
 }
 

@@ -9,6 +9,7 @@ use crate::modules::map_generator::MapGenerator;
 use crate::modules::map_processor::MapProcessor;
 use crate::modules::image_interpreter::ImageData;
 use crate::modules::image_interpreter::Pixel;
+use crate::modules::setup;
 
 #[test]
 fn test_new() {
@@ -17,6 +18,17 @@ fn test_new() {
 
     let processor_map_tiles = a_map_processor.get_map().get_tiles();
     assert_eq!(a_map_processor.get_map().get_tiles().len(), a_map.get_tiles().len());
+}
+
+#[test]
+fn test_setup() {
+    let mut a_map_processor: MapProcessor = Default::default();
+    let base_height: i32 = 200;
+
+    a_map_processor.setup(base_height);
+    a_map_processor.get_mut_map().update_tiles(|tile: &mut Tile| {
+        assert!(*tile.get_height() != i32::MAX);
+    });
 }
 
 #[test]
