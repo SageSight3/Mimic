@@ -4,7 +4,7 @@ version = 3
 
 [[package]]
 name = "Mimic"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "eframe",
  "env_logger",
