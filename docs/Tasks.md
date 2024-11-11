@@ -9,6 +9,7 @@
 * Write Map Processor unit tests for map generation - TEMP VERSION DONE
 * Digitize written documentation
 * rim max added height adjustments for larger craters (if rad is to big, maybe multiplier should shrink by an order of magnitude)
+* move making minimum height being >= 0 from noisify_height() in setup to compute_height_data() in Map
 
 ### Medium Priority
 * Once placeholder functionality's implemented, compile and benchmark a release build
