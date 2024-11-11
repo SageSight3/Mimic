@@ -111,6 +111,7 @@ impl MapProcessor {
         self.extrapolate_image_data();
         self.generate_image();
 
+        println!("Map generated!\n");
         println!("height range: {}", *self.map.get_height_range());
         println!("sea level: {}", *self.map.get_sea_level());
         println!("water surface area: {}%", *self.map.get_water_percent_surface_area() * 100.0);
@@ -121,13 +122,15 @@ impl MapProcessor {
     }
 
     pub fn setup(&mut self, base_height: i32)  {
+        println!("Preparing map...");
         unsafe {
-            Self::mark_gui_dirty("Preparing Map...".to_string());
+            Self::mark_gui_dirty("Preparing map...".to_string());
         }
         setup::set_up_map(&mut self.map, base_height);
     }
 
     pub fn generate_map(&mut self) {
+        println!("Generating map...");
         unsafe {
             Self::mark_gui_dirty("Generating map...".to_string());
         }   
@@ -135,6 +138,7 @@ impl MapProcessor {
     }
 
     pub fn extrapolate_image_data(&mut self) {
+        println!("Extrapolotating image data...");
         unsafe {
             Self::mark_gui_dirty("Extrapolating image data...".to_string());
         }
@@ -142,6 +146,7 @@ impl MapProcessor {
     }
     
     pub fn generate_image(&mut self) {
+        println!("Generating image...");
         unsafe {
             Self::mark_gui_dirty("Generating image...".to_string());
         }
