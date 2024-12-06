@@ -29,8 +29,8 @@ impl ImageGenerator {
     pub fn make_image(&self) -> Result<RgbImage, ImageError> {
         let mut image: RgbImage = ImageBuffer::new(*self.image_data.get_width(), *self.image_data.get_length());
 
-        for (x, row) in self.image_data.get_pixels().iter().enumerate() {
-            for (y, pixel) in row.iter().enumerate() {
+        for (y, row) in self.image_data.get_pixels().iter().enumerate() {
+            for (x, pixel) in row.iter().enumerate() {
                 image.put_pixel(x as u32, y as u32, Rgb([*pixel.get_r(), *pixel.get_g(), *pixel.get_b()]));
             }
         }
