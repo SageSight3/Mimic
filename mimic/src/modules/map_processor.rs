@@ -29,7 +29,7 @@ impl Default for MapProcessor {
    fn default() -> Self {
         Self {
             map: Default::default(),
-            map_name: "Tweaks".to_string(),
+            map_name: "Branch-Main".to_string(),
             status: "Map generator ready!".to_string(),
             map_image_data: None,
             map_image_path: "".to_string()
