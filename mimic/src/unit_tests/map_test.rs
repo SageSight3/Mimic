@@ -23,7 +23,7 @@ fn test_default() {
 
     assert_eq!(a_map.get_tiles().len(), *default_map_attrs.get_length());
     for row in a_map.get_tiles() {
-        assert_eq!(row.len(), *default_map_attrs.get_width());
+        assert_eq!(*a_map.get_width(), *default_map_attrs.get_width());
     }
 }
 

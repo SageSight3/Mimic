@@ -24,7 +24,8 @@ impl Distribution {
     pub fn rand(&self) -> u16 {
         let mut a_num: i16 = rand::thread_rng().gen_range(self.min..self.max) as i16;
 
-        let bias: i16 = rand::thread_rng().gen_range(0..self.skew.abs());
+        let mut bias: i16 = 0;
+        if self.skew > 0 { bias = rand::thread_rng().gen_range(0..self.skew.abs()); }
         if self.skew < 0 as i16 {
             a_num -= bias;
             if a_num < self.min as i16 { 

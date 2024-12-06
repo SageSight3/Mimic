@@ -116,11 +116,11 @@ impl Map {
     }
 
     pub fn get_tile(&self, row: usize, col: usize) -> &Tile {
-        &self.tiles[col][row]
+        &self.tiles[row][col]
     }
 
     pub fn get_mut_tile(&mut self, row: usize, col: usize) -> &mut Tile {
-        &mut self.tiles[col][row]
+        &mut self.tiles[row][col]
     }
 
     pub fn get_water_percent_surface_area(&self) -> &f32 {
@@ -134,7 +134,7 @@ impl Map {
     //this will be used when needing to completely change a tile, rather than any time any
     //of one's data changes
     pub fn set_tile(&mut self, a_tile: Tile, row: usize, col: usize) {
-        self.tiles[col][row] = a_tile
+        self.tiles[row][col] = a_tile
     }
 
     pub fn get_attrs(&self) -> &MapAttrs {
