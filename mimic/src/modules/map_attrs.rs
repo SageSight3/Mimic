@@ -38,11 +38,11 @@ impl MapAttrs {
 }
 
 pub fn default_width() -> usize {
-    2500
+    2000
 }
 
 pub fn default_length() -> usize {
-    1500
+    2000
 }
 
 //the 32-bit integer limit will be used as the default height of a tile
