@@ -29,10 +29,7 @@ impl ImpactGenerator {
 
         //generate impacts
         for impact in 0..num_of_impacts {
-            let impact_x: usize = thread_rng().gen_range(0..*a_map.get_width());
-            let impact_y: usize = thread_rng().gen_range(0..*a_map.get_length());
-
-            let an_impact_coord: Coordinate = Coordinate::new(impact_x, impact_y);
+            let an_impact_coord: Coordinate = a_map.random_coordinate();
 
             let a_crater_depth: u16 = depth_range.rand();
 
